@@ -65,7 +65,7 @@ export default {
      background: #c0392b;
    }
   .flag {
-     background: #2ecc71;
+     color: rgba(241, 2, 27, 0.82);
    }
   .open0 {
     background: rgba(122, 0, 218, 0.27);
