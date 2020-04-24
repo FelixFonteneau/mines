@@ -31,15 +31,15 @@ export default {
   props: {
     nbCols: {
       type: Number,
-      default: 18
+      default: 10
     },
     nbRows: {
       type: Number,
-      default: 14
+      default: 8
     },
     nbBombs: {
       type: Number,
-      default: 40
+      default: 10
     }
   },
   data: function () {
@@ -47,8 +47,9 @@ export default {
       haveBegun: false,
       haveFinished: false,
       haveWon: true,
-      bombsRemaining: this.nbBombs,
       gridSize: this.nbCols * this.nbRows,
+      bombsRemaining: this.nbBombs,
+      cellRemaining: this.nbCols * this.nbRows - this.nbBombs,
       cellGrid: []
     }
   },
@@ -75,14 +76,14 @@ export default {
       let i = 0
       while (i < this.nbBombs) {
         const rand = Math.floor(Math.random() * this.gridSize)
-        if (!this.cellGrid[rand].hasBomb && !this.isInNeighborhood(rand, index)) {
+        if (!this.cellGrid[rand].hasBomb && (rand !== i) && !this.isInNeighborhood(rand, index)) {
           this.cellGrid[rand].hasBomb = true
           i++
         }
       }
     },
-    clickCell (cell, i) {
-      if (this.haveFinished) {
+    clickCell: function (cell, i) {
+      if (this.haveFinished || cell.hasFlag) {
         return
       }
       if (!this.haveBegun) {
@@ -99,10 +100,16 @@ export default {
           this.haveWon = false
           this.revealBombs()
         } else {
+          cell.bombNb = this.getNumberNeighboursBombs(i)
+          this.cellRemaining--
+          console.log('reste : ' + this.cellRemaining)
+          if (this.cellRemaining === 0) {
+            this.haveFinished = true
+            console.log('TERMINE')
+          }
           // console.log('cell :' + i)
           // console.log(' bombs :' + this.getNumberNeighboursBombs(i))
           // console.log(this.getNeighboursIndex(i))
-          cell.bombNb = this.getNumberNeighboursBombs(i)
           if (cell.bombNb === 0) {
             this.openNeighbours(i)
           }
@@ -110,10 +117,22 @@ export default {
       }
     },
     addFlag (cell) {
-
+      if (!this.haveFinished && this.haveBegun && !cell.isOpen) {
+        cell.hasFlag = !cell.hasFlag
+        if (cell.hasFlag) {
+          this.bombsRemaining--
+        } else {
+          this.bombsRemaining++
+        }
+        console.log('bombs remaining : ' + this.bombsRemaining)
+      }
     },
-    doubleClick (cell, i) {
-
+    doubleClick (cell, index) {
+      if (!this.haveFinished && this.haveBegun && cell.isOpen) {
+        if (cell.bombNb === this.getNumberNeighboursFlag(index)) {
+          this.openNeighbours(index)
+        }
+      }
     },
     revealBombs () {
       for (let i = 0; i < this.gridSize; i++) {
@@ -162,6 +181,16 @@ export default {
       let neighbours = this.getNeighboursIndex(index)
       for (let i = 0; i < neighbours.length; i++) {
         if (this.cellGrid[neighbours[i]].hasBomb) {
+          nbBombs++
+        }
+      }
+      return nbBombs
+    },
+    getNumberNeighboursFlag (index) {
+      let nbBombs = 0
+      let neighbours = this.getNeighboursIndex(index)
+      for (let i = 0; i < neighbours.length; i++) {
+        if (this.cellGrid[neighbours[i]].hasFlag) {
           nbBombs++
         }
       }
