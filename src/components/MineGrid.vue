@@ -1,5 +1,13 @@
 <template>
-  <div class="container">
+  <div class="game">
+    <div class="header">
+      <div class="bombsRemaining">
+        &#128163;{{bombsRemaining}}
+      </div>
+      <div class="timer">
+        <Timer ref="timer" ></Timer>
+      </div>
+    </div>
     <div class="grid" :style="getGridStyle()">
       <MineCell
         v-for="(cell, i) in cellGrid"
@@ -21,11 +29,12 @@
 
 <script>
 import MineCell from './MineCell'
+import Timer from './Timer'
 
 export default {
   name: 'MineGrid',
   components: {
-    MineCell
+    MineCell, Timer
   },
 
   props: {
@@ -74,6 +83,7 @@ export default {
      */
     initGrid (cell, index) {
       let i = 0
+      this.$refs.timer.start()
       while (i < this.nbBombs) {
         const rand = Math.floor(Math.random() * this.gridSize)
         if (!this.cellGrid[rand].hasBomb && (rand !== i) && !this.isInNeighborhood(rand, index)) {
@@ -89,9 +99,6 @@ export default {
       if (!this.haveBegun) {
         this.initGrid(cell, i)
         this.haveBegun = true
-        console.log('init')
-        console.log('size : ' + this.gridSize)
-        console.log(this.cellGrid)
       }
       if (!cell.isOpen) {
         cell.isOpen = true
@@ -202,13 +209,34 @@ export default {
 </script>
 
 <style >
-
-  container {
+  .header {
+    width: available;
+    background-color: rgba(84, 84, 84, 0.85);
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
   }
-  container >  {
+  .header > * {
+    width: 100px;
+    display: inline-block;
+    display: inline;
+    vertical-align: baseline;
+    margin-top: auto;
+    margin-bottom: auto;
+    zoom: 1
+  }
+
+  .game {
+    justify-content: space-between;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-right: 0px;
+    margin-left: 0px;
+    padding: 0px;
+  }
+  .game >  {
     flex: 1;
     text-align: center;
   }
@@ -229,7 +257,7 @@ export default {
      grid-row: 1 / 1;
      grid-column: 1 / 1;
    }
-  .grid > :first-child {
+  .grid > *:first-child {
     grid-row: 1 / 1;
     grid-column: 1 / 1;
   }
