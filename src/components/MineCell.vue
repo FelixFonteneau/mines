@@ -36,7 +36,7 @@ export default {
         return 'bomb'
       }
       if (this.isOpen) {
-        return 'open' + this.bombCount
+        return 'open nb' + this.bombCount
       }
       if (this.hasFlag) {
         return 'flag'
@@ -67,32 +67,34 @@ export default {
   .flag {
      color: rgba(241, 2, 27, 0.82);
    }
-  .open0 {
-    background: rgba(122, 0, 218, 0.27);
+
+  .open {
+    background: rgba(136, 0, 242, 0.14);
+    font-weight: bold; /* same as 700 */
   }
-  .open1 {
-    background: rgba(0, 71, 155, 0.76);
+  .nb1 {
+    color: rgba(0, 71, 155, 0.76);
   }
-  .open2 {
-    background: rgba(15, 179, 53, 0.81);
+  .nb2 {
+    color: rgba(15, 179, 53, 0.81);
   }
-  .open3 {
-    background: rgba(209, 0, 19, 0.77);
+  .nb3 {
+    color: rgba(209, 0, 19, 0.77);
   }
-  .open4 {
-    background: rgba(130, 0, 191, 0.73);
+  .nb4 {
+    color: rgba(130, 0, 191, 0.73);
   }
-  .open5 {
-    background: rgba(130, 37, 0, 0.82);
+  .nb5 {
+    color: rgba(130, 37, 0, 0.82);
   }
-  .open6 {
-    background: rgba(0, 206, 209, 0.84);
+  .nb6 {
+    color: rgba(0, 206, 209, 0.84);
   }
-  .open7 {
-    background: rgba(34, 34, 34, 0.97);
+  .nb7 {
+    color: rgba(34, 34, 34, 0.97);
   }
-  .open8 {
-    background: rgba(70, 70, 70, 0.61);
+  .nb8 {
+    color: rgba(70, 70, 70, 0.61);
   }
 
 </style>
