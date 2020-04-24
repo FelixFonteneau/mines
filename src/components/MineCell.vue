@@ -1,17 +1,17 @@
 <template>
   <div class="cell" :class="getClass()">
-    <div v-if="isOpen && bombCount">
-      {{ bombCount }}
-    </div>
     <div v-if="hasFlag">
       &#9873;
+    </div>
+    <div v-if="isOpen && bombNb">
+      {{ bombNb }}
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'mine-cell',
+  name: 'MineCell',
   props: {
     isOpen: {
       type: Boolean,
@@ -25,7 +25,7 @@ export default {
       type: Boolean,
       required: true
     },
-    bombCount: {
+    bombNb: {
       type: Number,
       required: true
     }
@@ -36,7 +36,7 @@ export default {
         return 'bomb'
       }
       if (this.isOpen) {
-        return 'open nb' + this.bombCount
+        return 'open nb' + this.bombNb
       }
       if (this.hasFlag) {
         return 'flag'
@@ -52,7 +52,6 @@ export default {
     align-items: center;
     background: rgba(0, 0, 0, 0.1);
     border: 1px white solid;
-    color: #2c3e50;
     cursor: pointer;
     display: flex;
     font-size: 1.3em;
@@ -62,13 +61,16 @@ export default {
   }
 
   .bomb {
-     background: #c0392b;
-   }
+    background: #c0392b;
+    cursor:initial;
+  }
   .flag {
-     color: rgba(241, 2, 27, 0.82);
-   }
+    color: rgba(241, 2, 27, 0.82);
+    cursor:initial;
+  }
 
   .open {
+    cursor:initial;
     background: rgba(136, 0, 242, 0.14);
     font-weight: bold; /* same as 700 */
   }
