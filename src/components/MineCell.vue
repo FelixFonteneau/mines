@@ -1,0 +1,98 @@
+<template>
+  <div class="cell" :class="getClass()">
+    <div v-if="isOpen && bombCount">
+      {{ bombCount }}
+    </div>
+    <div v-if="hasFlag">
+      &#9873;
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'mine-cell',
+  props: {
+    isOpen: {
+      type: Boolean,
+      required: true
+    },
+    hasBomb: {
+      type: Boolean,
+      required: true
+    },
+    hasFlag: {
+      type: Boolean,
+      required: true
+    },
+    bombCount: {
+      type: Number,
+      required: true
+    }
+  },
+  methods: {
+    getClass () {
+      if (this.isOpen && this.hasBomb) {
+        return 'bomb'
+      }
+      if (this.isOpen) {
+        return 'open' + this.bombCount
+      }
+      if (this.hasFlag) {
+        return 'flag'
+      }
+      return ''
+    }
+  }
+}
+</script>
+
+<style >
+  .cell {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px white solid;
+    color: #2c3e50;
+    cursor: pointer;
+    display: flex;
+    font-size: 1.3em;
+    justify-content: center;
+    min-height: 35px;
+    min-width: 35px;
+  }
+
+  .bomb {
+     background: #c0392b;
+   }
+  .flag {
+     background: #2ecc71;
+   }
+  .open0 {
+    background: rgba(122, 0, 218, 0.27);
+  }
+  .open1 {
+    background: rgba(0, 71, 155, 0.76);
+  }
+  .open2 {
+    background: rgba(15, 179, 53, 0.81);
+  }
+  .open3 {
+    background: rgba(209, 0, 19, 0.77);
+  }
+  .open4 {
+    background: rgba(130, 0, 191, 0.73);
+  }
+  .open5 {
+    background: rgba(130, 37, 0, 0.82);
+  }
+  .open6 {
+    background: rgba(0, 206, 209, 0.84);
+  }
+  .open7 {
+    background: rgba(34, 34, 34, 0.97);
+  }
+  .open8 {
+    background: rgba(70, 70, 70, 0.61);
+  }
+
+</style>

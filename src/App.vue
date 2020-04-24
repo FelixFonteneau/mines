@@ -1,13 +1,23 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <CaseMine :hasBomb="false" :isOpen="true" :hasFlag="false" :bombCount="0"></CaseMine>
+    <CaseMine :hasBomb="false" :isOpen="true" :hasFlag="false" :bombCount="1"></CaseMine>
+    <CaseMine :hasBomb="false" :isOpen="true" :hasFlag="false" :bombCount="2"></CaseMine>
+    <CaseMine :hasBomb="false" :isOpen="true" :hasFlag="false" :bombCount="3"></CaseMine>
+    <CaseMine :hasBomb="false" :isOpen="true" :hasFlag="false" :bombCount="4"></CaseMine>
+    <CaseMine :hasBomb="false" :isOpen="true" :hasFlag="false" :bombCount="5"></CaseMine>
+    <CaseMine :hasBomb="false" :isOpen="true" :hasFlag="false" :bombCount="6"></CaseMine>
+    <CaseMine :hasBomb="false" :isOpen="true" :hasFlag="false" :bombCount="7"></CaseMine>
+    <CaseMine :hasBomb="false" :isOpen="true" :hasFlag="false" :bombCount="8"></CaseMine>
+
   </div>
 </template>
 
 <script>
+import CaseMine from './components/MineCell'
 export default {
-  name: 'App'
+  name: 'App',
+  components: {CaseMine}
 }
 </script>
 
