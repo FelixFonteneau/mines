@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <b-navbar toggleable type="dark" variant="dark">
+    <b-navbar toggleable type="dark"  class="navbar">
       <b-navbar-brand href="#">Minesweeper</b-navbar-brand>
 
       <b-navbar-toggle target="navbar-toggle-collapse">
@@ -70,5 +70,8 @@ export default {
 </script>
 
 <style>
+  .navbar {
+    background-color: rgb(107, 84, 152);
+  }
 
 </style>

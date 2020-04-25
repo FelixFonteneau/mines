@@ -104,7 +104,7 @@ export default {
   .open {
     border: 1px solid #EEEEEE;
     cursor:initial;
-    background: rgba(255, 0, 250, 0.09);
+    background: rgba(178, 118, 255, 0.11);
     font-weight: bold; /* same as 700 */
   }
   .nb1 {

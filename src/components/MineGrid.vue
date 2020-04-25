@@ -299,7 +299,7 @@ export default {
     background-color: rgba(232, 241, 255, 0);/*rgba(52, 58, 64, 0.85);*/
     display: flex;
     justify-content: space-between;
-    margin-top: 2%;
+    margin-top: 1%;
     height: 60px;
   }
   .header > * {
@@ -348,13 +348,16 @@ export default {
   }
 
   .grid{
-    padding: 2%;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6), -2px -2px 4px rgba(255, 255, 255, 0.7);
+    border-radius: 2px;
     text-align: center;
     display: flex;
     justify-content: space-between;
     position: absolute;
     width: 100vh;
     margin: 0 auto;
+    margin-top: 1%;
+    margin-bottom: 1%;
     user-select: none;
     position: relative;
     overflow: auto;
