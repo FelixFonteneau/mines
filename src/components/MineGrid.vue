@@ -1,8 +1,10 @@
 <template>
   <div class="game">
     <div class="header">
+      <Help class="box">
+      </Help>
       <div class="bombsRemaining box">
-        &#128163;{{bombsRemaining}}
+        &#128163; {{bombsRemaining}}
       </div>
       <div class="smiley box" @click="restart()">
         <span v-if="smiley === 'happy'">
@@ -19,8 +21,17 @@
         </span>
       </div>
       <div class="timer box">
-        <Timer ref="timer" :started="timerStart" :stopped="timerStop"></Timer>
+        <Timer ref="timer" :started="timerStart" :stopped="timerStop" @time="newTime"></Timer>
       </div>
+      <Scores
+        ref="scores"
+        class="box scores"
+        :new-time="time"
+        :new-score="newScore"
+        :game-type="{nbCols: nbCols, nbRows: nbRows, nbBombs: nbBombs}">
+
+      </Scores>
+
     </div>
     <div class="grid" :style="getGridStyle()">
       <MineCell
@@ -46,13 +57,14 @@
 <script>
 import MineCell from './MineCell'
 import Timer from './Timer'
+import Scores from './Scores'
+import Help from './Help'
 
 export default {
   name: 'MineGrid',
   components: {
-    MineCell, Timer
+    MineCell, Timer, Scores, Help
   },
-
   props: {
     nbCols: {
       type: Number,
@@ -82,7 +94,15 @@ export default {
       cellGrid: [],
       smiley: 'happy',
       timerStart: false,
-      timerStop: true
+      timerStop: true,
+      time: {
+        hour: 0,
+        minute: 0,
+        second: 0,
+        centisecond: 0,
+        totalCenti: 0
+      },
+      newScore: false
     }
   },
   mounted () {
@@ -112,10 +132,11 @@ export default {
       this.mountTheGrid()
       this.timerStop = true
       this.timerStart = false
+      this.newScore = false
     },
     getGridStyle () {
       return `grid-template-columns: repeat(${this.nbCols}, 1fr);
-              width: ${100 * this.nbCols / this.nbRows}vh;`
+              width: ${85 * this.nbCols / this.nbRows}vh;`
     },
 
     initGrid (cell, index) {
@@ -159,6 +180,7 @@ export default {
           if (this.cellRemaining === 0) {
             this.haveFinished = true
             this.smiley = 'cool'
+            this.newScore = true
             this.timerStop = true
           }
           // console.log('cell :' + i)
@@ -178,7 +200,6 @@ export default {
         } else {
           this.bombsRemaining++
         }
-        console.log('bombs remaining : ' + this.bombsRemaining)
       }
     },
     doubleClick (cell, index) {
@@ -249,6 +270,9 @@ export default {
         }
       }
       return nbBombs
+    },
+    newTime: function (time) {
+      this.time = time
     }
   },
   watch: {
@@ -272,9 +296,10 @@ export default {
 <style >
   .header {
     width: available;
-    background-color: rgb(90, 95, 100);/*rgba(52, 58, 64, 0.85);*/
+    background-color: rgba(232, 241, 255, 0);/*rgba(52, 58, 64, 0.85);*/
     display: flex;
     justify-content: space-between;
+    margin-top: 2%;
     height: 60px;
   }
   .header > * {
@@ -289,18 +314,13 @@ export default {
   }
 
   .box {
-    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-    0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-    0 12.5px 10px rgba(0, 0, 0, 0.06),
-    0 22.3px 17.9px rgba(0, 0, 0, 0.072),
-    0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-    0 100px 80px rgba(0, 0, 0, 0.12);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6), -2px -2px 4px rgba(255, 255, 255, 0.7);
     min-height: 30px;
     width: 130px;
     margin: 7px auto;
     padding: 10px;
     font-size: 20px;
-    background: white;
+    background: #EEEEEE;
     border-radius: 10px;
     vertical-align: middle;
     text-align: center;
@@ -353,6 +373,10 @@ export default {
   .grid > *:first-child {
     grid-row: 1 / 1;
     grid-column: 1 / 1;
+  }
+
+  .scores{
+    cursor: pointer;
   }
 
 </style>

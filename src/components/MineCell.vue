@@ -76,19 +76,19 @@ export default {
   .cell {
     align-items: center;
     background: rgba(0, 0, 0, 0.2);
-    border: 1px outset white;
+    border: 2px outset white;
     cursor: pointer;
     display: flex;
     font-size: 1.3em;
     justify-content: center;
     min-height: 10px;
     min-width: 10px;
-    font-size: 3.5vh;
+    font-size: 2.5vh;
 
   }
 
   .bomb {
-    border: none;
+    border: 1px solid white;
     background: #c0392b;
     cursor:initial;
   }
@@ -102,7 +102,7 @@ export default {
   }
 
   .open {
-    border: none;
+    border: 1px solid white;
     cursor:initial;
     background: rgba(255, 0, 250, 0.09);
     font-weight: bold; /* same as 700 */
