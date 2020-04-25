@@ -10,18 +10,23 @@
 export default {
   name: 'Timer',
   props: {
-    second: {
-      type: Number,
-      default: 0
-    },
     started: {
       type: Boolean,
-      default: false
+      required: true
+    },
+    stopped: {
+      type: Boolean,
+      required: true
+    }
+  },
+  data () {
+    return {
+      second: 0
     }
   },
   mounted: function () {
     this.$interval = setInterval(() => {
-      if (this.started) {
+      if (!this.stopped) {
         this.second++
       }
     }, 1000)
@@ -30,18 +35,18 @@ export default {
     clearInterval(this.$interval)
   },
   methods: {
-    start () {
-      this.started = true
-    },
-    pause () {
-      this.started = false
-    },
-    stop () {
-      this.start = false
+    init () {
       this.second = 0
     },
     getTime () {
       return this.second
+    }
+  },
+  watch: {
+    started () {
+      this.init()
+    },
+    stopped () {
     }
   }
 }

@@ -1,11 +1,25 @@
 <template>
   <div class="game">
     <div class="header">
-      <div class="bombsRemaining">
+      <div class="bombsRemaining box">
         &#128163;{{bombsRemaining}}
       </div>
-      <div class="timer">
-        <Timer ref="timer" ></Timer>
+      <div class="smiley box" @click="restart()">
+        <span v-if="smiley === 'happy'">
+          &#128578;
+        </span>
+        <span v-if="smiley === 'surprised'">
+          &#128558;
+        </span>
+        <span v-if="smiley === 'dead'">
+          &#128555;
+        </span>
+        <span v-if="smiley === 'cool'">
+          &#128526;
+        </span>
+      </div>
+      <div class="timer box">
+        <Timer ref="timer" :started="timerStart" :stopped="timerStop"></Timer>
       </div>
     </div>
     <div class="grid" :style="getGridStyle()">
@@ -59,34 +73,49 @@ export default {
       gridSize: this.nbCols * this.nbRows,
       bombsRemaining: this.nbBombs,
       cellRemaining: this.nbCols * this.nbRows - this.nbBombs,
-      cellGrid: []
+      cellGrid: [],
+      smiley: 'happy',
+      timerStart: false,
+      timerStop: true
     }
   },
   mounted () {
-    for (let i = 0; i < this.gridSize; i += 1) {
-      this.cellGrid.push({
-        hasBomb: false,
-        isOpen: false,
-        hasFlag: false,
-        bombNb: 0
-      })
-    }
+    this.mountTheGrid()
   },
   methods: {
+    mountTheGrid () {
+      for (let i = 0; i < this.gridSize; i += 1) {
+        this.cellGrid.push({
+          hasBomb: false,
+          isOpen: false,
+          hasFlag: false,
+          bombNb: 0
+        })
+      }
+    },
+    restart () {
+      this.haveBegun = false
+      this.haveFinished = false
+      this.haveWon = true
+      this.gridSize = this.nbCols * this.nbRows
+      this.bombsRemaining = this.nbBombs
+      this.cellRemaining = this.nbCols * this.nbRows - this.nbBombs
+      this.cellGrid = []
+      this.smiley = 'happy'
+      this.mountTheGrid()
+      this.timerStop = true
+      this.timerStart = false
+    },
     getGridStyle () {
       return `grid-template-columns: repeat(${this.nbCols}, 1fr);`
     },
-    /**
-     *
-     * @param cell
-     * @param index
-     */
+
     initGrid (cell, index) {
       let i = 0
-      this.$refs.timer.start()
       while (i < this.nbBombs) {
         const rand = Math.floor(Math.random() * this.gridSize)
         if (!this.cellGrid[rand].hasBomb && (rand !== i) && !this.isInNeighborhood(rand, index)) {
+          console.log('bomb et index : ' + this.isInNeighborhood(rand, index))
           this.cellGrid[rand].hasBomb = true
           i++
         }
@@ -99,20 +128,24 @@ export default {
       if (!this.haveBegun) {
         this.initGrid(cell, i)
         this.haveBegun = true
+        this.timerStart = true
+        this.timerStop = false
       }
       if (!cell.isOpen) {
         cell.isOpen = true
         if (cell.hasBomb) {
+          this.smiley = 'dead'
           this.haveFinished = true
+          this.timerStop = true
           this.haveWon = false
           this.revealBombs()
         } else {
           cell.bombNb = this.getNumberNeighboursBombs(i)
           this.cellRemaining--
-          console.log('reste : ' + this.cellRemaining)
           if (this.cellRemaining === 0) {
             this.haveFinished = true
-            console.log('TERMINE')
+            this.smiley = 'cool'
+            this.timerStop = true
           }
           // console.log('cell :' + i)
           // console.log(' bombs :' + this.getNumberNeighboursBombs(i))
@@ -211,11 +244,12 @@ export default {
 <style >
   .header {
     width: available;
-    background-color: rgba(84, 84, 84, 0.85);
+    background-color: rgb(90, 95, 100);/*rgba(52, 58, 64, 0.85);*/
     display: flex;
     justify-content: space-between;
   }
   .header > * {
+    background-color: #b74e91;
     width: 100px;
     display: inline-block;
     display: inline;
@@ -225,8 +259,31 @@ export default {
     zoom: 1
   }
 
+  .box {
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+    0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+    0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
+    min-height: 30px;
+    width: 130px;
+    margin: 10px auto;
+    padding: 5px;
+    font-size: 25px;
+    background: white;
+    border-radius: 10px;
+    vertical-align: middle;
+    text-align: center;
+    display:inline-block;
+  }
+
+  .smiley{
+    cursor: pointer;
+  }
+
   .game {
-    justify-content: space-between;
+    height: 100vh;
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -242,6 +299,12 @@ export default {
   }
 
   .grid{
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    width: 100vh;
+    margin: 0 auto;
     user-select: none;
     position: relative;
     overflow: auto;
