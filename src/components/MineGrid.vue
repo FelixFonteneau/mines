@@ -30,6 +30,8 @@
         :isOpen="cell.isOpen"
         :hasFlag="cell.hasFlag"
         :bombNb="cell.bombNb"
+        :is-finished="haveFinished"
+        :have-won="haveWon"
         @click.native="clickCell(cell, i)"
         @click.right.native="addFlag(cell)"
         @dblclick.native.prevent="doubleClick(cell, i)"
@@ -63,6 +65,10 @@ export default {
     nbBombs: {
       type: Number,
       default: 10
+    },
+    restartGame: {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
@@ -84,6 +90,7 @@ export default {
   },
   methods: {
     mountTheGrid () {
+      this.cellGrid = []
       for (let i = 0; i < this.gridSize; i += 1) {
         this.cellGrid.push({
           hasBomb: false,
@@ -107,7 +114,8 @@ export default {
       this.timerStart = false
     },
     getGridStyle () {
-      return `grid-template-columns: repeat(${this.nbCols}, 1fr);`
+      return `grid-template-columns: repeat(${this.nbCols}, 1fr);
+              width: ${100 * this.nbCols / this.nbRows}vh;`
     },
 
     initGrid (cell, index) {
@@ -115,7 +123,6 @@ export default {
       while (i < this.nbBombs) {
         const rand = Math.floor(Math.random() * this.gridSize)
         if (!this.cellGrid[rand].hasBomb && (rand !== i) && !this.isInNeighborhood(rand, index)) {
-          console.log('bomb et index : ' + this.isInNeighborhood(rand, index))
           this.cellGrid[rand].hasBomb = true
           i++
         }
@@ -126,7 +133,14 @@ export default {
         return
       }
       if (!this.haveBegun) {
+        this.mountTheGrid()
         this.initGrid(cell, i)
+        cell = this.cellGrid[i]
+        while (cell.hasBomb) {
+          this.mountTheGrid()
+          this.initGrid(cell, i)
+          cell = this.cellGrid[i]
+        }
         this.haveBegun = true
         this.timerStart = true
         this.timerStop = false
@@ -138,7 +152,7 @@ export default {
           this.haveFinished = true
           this.timerStop = true
           this.haveWon = false
-          this.revealBombs()
+          this.revealGrid()
         } else {
           cell.bombNb = this.getNumberNeighboursBombs(i)
           this.cellRemaining--
@@ -174,7 +188,7 @@ export default {
         }
       }
     },
-    revealBombs () {
+    revealGrid () {
       for (let i = 0; i < this.gridSize; i++) {
         if (this.cellGrid[i].hasBomb && !this.cellGrid[i].hasFlag) {
           this.cellGrid[i].isOpen = true
@@ -236,6 +250,20 @@ export default {
       }
       return nbBombs
     }
+  },
+  watch: {
+    nbCols () {
+      this.restart()
+    },
+    nbRows () {
+      this.restart()
+    },
+    nbBombs () {
+      this.restart()
+    },
+    restartGame () {
+      this.restart()
+    }
   }
 
 }
@@ -247,6 +275,7 @@ export default {
     background-color: rgb(90, 95, 100);/*rgba(52, 58, 64, 0.85);*/
     display: flex;
     justify-content: space-between;
+    height: 60px;
   }
   .header > * {
     background-color: #b74e91;
@@ -268,9 +297,9 @@ export default {
     0 100px 80px rgba(0, 0, 0, 0.12);
     min-height: 30px;
     width: 130px;
-    margin: 10px auto;
-    padding: 5px;
-    font-size: 25px;
+    margin: 7px auto;
+    padding: 10px;
+    font-size: 20px;
     background: white;
     border-radius: 10px;
     vertical-align: middle;
@@ -283,7 +312,7 @@ export default {
   }
 
   .game {
-    height: 100vh;
+    height: 80vh;
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -299,6 +328,7 @@ export default {
   }
 
   .grid{
+    padding: 2%;
     text-align: center;
     display: flex;
     justify-content: space-between;
@@ -324,4 +354,5 @@ export default {
     grid-row: 1 / 1;
     grid-column: 1 / 1;
   }
+
 </style>

@@ -12,13 +12,18 @@
 
       <b-collapse id="navbar-toggle-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item href="#">Easy</b-nav-item>
-          <b-nav-item href="#">Intermediate</b-nav-item>
-          <b-nav-item href="#" >Normal</b-nav-item>
+          <b-nav-item @click="difficulty('easy')">Easy</b-nav-item>
+          <b-nav-item @click="difficulty('intermediate')">Intermediate</b-nav-item>
+          <b-nav-item  @click="difficulty('normal')">Normal</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <MineGrid></MineGrid>
+    <MineGrid
+      :nb-cols="nbCols"
+      :nb-rows="nbRows"
+      :nb-bombs="nbBombs"
+      :restart-game="restart"
+    ></MineGrid>
   </div>
 </template>
 
@@ -31,6 +36,35 @@ export default {
   components: {
     MineCell,
     MineGrid
+  },
+  data: function () {
+    return {
+      nbCols: 10,
+      nbRows: 8,
+      nbBombs: 10,
+      restart: false
+    }
+  },
+  methods: {
+    difficulty (diff) {
+      if (diff === 'easy') {
+        this.nbCols = 10
+        this.nbRows = 8
+        this.nbBombs = 10
+      } else if (diff === 'intermediate') {
+        this.nbCols = 16
+        this.nbRows = 14
+        this.nbBombs = 40
+      } else if (diff === 'normal') {
+        this.nbCols = 30
+        this.nbRows = 16
+        this.nbBombs = 99
+      }
+      this.restart = true
+      setTimeout(function () {
+        this.restart = false
+      }, 10)
+    }
   }
 }
 </script>

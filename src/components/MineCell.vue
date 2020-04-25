@@ -3,6 +3,9 @@
     <div v-if="hasFlag">
       &#9873;
     </div>
+    <div v-if="hasBomb && isOpen">
+      &#128163;
+    </div>
     <div v-if="isOpen && bombNb">
       {{ bombNb }}
     </div>
@@ -28,10 +31,32 @@ export default {
     bombNb: {
       type: Number,
       required: true
+    },
+    isFinished: {
+      type: Boolean,
+      required: true
+    },
+    haveWon: {
+      type: Boolean,
+      required: true
     }
   },
   methods: {
     getClass () {
+      if (this.isFinished) {
+        if (this.hasFlag && !this.hasBomb) {
+          return 'flag open'
+        }
+        if (this.hasBomb && !this.haveWon) {
+          return 'bomb'
+        }
+        if (this.hasFlag) {
+          return 'flag'
+        }
+        if (!this.isOpen) {
+          return 'notClickable'
+        }
+      }
       if (this.isOpen && this.hasBomb) {
         return 'bomb'
       }
@@ -50,17 +75,20 @@ export default {
 <style >
   .cell {
     align-items: center;
-    background: rgba(0, 0, 0, 0.1);
-    border: 1px white solid;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px outset white;
     cursor: pointer;
     display: flex;
     font-size: 1.3em;
     justify-content: center;
-    min-height: 35px;
-    min-width: 35px;
+    min-height: 10px;
+    min-width: 10px;
+    font-size: 3.5vh;
+
   }
 
   .bomb {
+    border: none;
     background: #c0392b;
     cursor:initial;
   }
@@ -69,9 +97,14 @@ export default {
     cursor:initial;
   }
 
-  .open {
+  .notClickable{
     cursor:initial;
-    background: rgba(136, 0, 242, 0.14);
+  }
+
+  .open {
+    border: none;
+    cursor:initial;
+    background: rgba(255, 0, 250, 0.09);
     font-weight: bold; /* same as 700 */
   }
   .nb1 {
