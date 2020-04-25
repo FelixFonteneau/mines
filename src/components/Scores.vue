@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-b-toggle.collapse-2 class="m-1">&#128285;</div>
+    <div v-b-toggle.collapse-2 class="m-1"> <span class="bestScore">&#128285; {{bestScore}}</span></div>
     <b-collapse id="collapse-2" class="scoresHistory">
       <b-table striped hover :items="scoresSuitable"></b-table>
     </b-collapse>
@@ -27,7 +27,8 @@ export default {
   data: function () {
     return {
       scores: [],
-      scoresSuitable: []
+      scoresSuitable: [],
+      bestScore: ''
     }
   },
   mounted () {
@@ -85,13 +86,23 @@ export default {
       let pos = 1
       for (let i = 0; i < this.scores.length; i++) {
         if (this.scores[i].gameType.nbRows === this.gameType.nbRows && this.scores[i].gameType.nbCols === this.gameType.nbCols && this.scores[i].gameType.nbBombs === this.gameType.nbBombs) {
+          const timeString = (!this.scores[i].time.hour ? '' : this.scores[i].time.hour + ':') +
+                              (!this.scores[i].time.minute && !this.scores[i].time.hour ? '' : (!this.scores[i].time.minute ? '0' : '') + this.scores[i].time.minute + ':') +
+                              ((!this.scores[i].time.second && (this.scores[i].time.minute || this.scores[i].time.hour)) || (this.scores[i].time.second && this.scores[i].time.second < 10 && (this.scores[i].time.minute || this.scores[i].time.hour)) ? '0' : '') + this.scores[i].time.second + ':' +
+                              (!this.scores[i].time.centisecond || this.scores[i].time.centisecond < 10 ? '0' : '') + this.scores[i].time.centisecond
+          if (pos === 1) {
+            this.bestScore = timeString
+          }
           const row = {
             pos: pos++,
-            time: (!this.scores[i].time.hour ? '' : this.scores[i].time.hour + ':') + (!this.scores[i].time.minute ? '0' : '') + this.scores[i].time.minute + ':' + (!this.scores[i].time.second || this.scores[i].time.second < 10 ? '0' : '') + this.scores[i].time.second + ':' + (!this.scores[i].time.centisecond || this.scores[i].time.centisecond < 10 ? '0' : '') + this.scores[i].time.centisecond,
+            time: timeString,
             date: this.scores[i].date
           }
           this.scoresSuitable.push(row)
         }
+      }
+      if (pos === 1) {
+        this.bestScore = ''
       }
     }
   },
@@ -100,6 +111,9 @@ export default {
       if (this.newScore) {
         this.addTime()
       }
+    },
+    gameType () {
+      this.showScores()
     }
   }
 }
@@ -117,5 +131,8 @@ export default {
     background-color: white;
     cursor: initial;
     border-radius: 10px;
+  }
+
+  .bestScore{
   }
 </style>

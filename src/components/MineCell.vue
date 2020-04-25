@@ -84,11 +84,11 @@ export default {
     min-height: 10px;
     min-width: 10px;
     font-size: 2.5vh;
-
+    border-radius: 2px;
   }
 
   .bomb {
-    border: 1px solid white;
+    border: 1px solid #EEEEEE;
     background: #c0392b;
     cursor:initial;
   }
@@ -102,7 +102,7 @@ export default {
   }
 
   .open {
-    border: 1px solid white;
+    border: 1px solid #EEEEEE;
     cursor:initial;
     background: rgba(255, 0, 250, 0.09);
     font-weight: bold; /* same as 700 */

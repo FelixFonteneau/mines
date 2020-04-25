@@ -319,8 +319,8 @@ export default {
     width: 130px;
     margin: 7px auto;
     padding: 10px;
-    font-size: 20px;
-    background: #EEEEEE;
+    font-size: 17px;
+    background: #f5f5f5;
     border-radius: 10px;
     vertical-align: middle;
     text-align: center;
