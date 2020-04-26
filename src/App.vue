@@ -1,7 +1,14 @@
 <template>
   <div id="app">
     <b-navbar toggleable type="dark"  class="navbar">
-      <b-navbar-brand href="#">Minesweeper</b-navbar-brand>
+      <b-navbar-brand href="#game">Minesweeper</b-navbar-brand>
+
+      <b-collapse id="nav-text-collapse" is-nav>
+        <b-navbar-nav>
+          <b-nav-text>by</b-nav-text>
+          <b-nav-item href="#">Félix</b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
 
       <b-navbar-toggle target="navbar-toggle-collapse">
         <template v-slot:default="{ expanded }">
@@ -12,13 +19,14 @@
 
       <b-collapse id="navbar-toggle-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item @click="difficulty('easy')">Easy</b-nav-item>
-          <b-nav-item @click="difficulty('intermediate')">Intermediate</b-nav-item>
-          <b-nav-item  @click="difficulty('normal')">Normal</b-nav-item>
+          <b-nav-item href="#game" @click="difficulty('easy')">Easy</b-nav-item>
+          <b-nav-item href="#game" @click="difficulty('intermediate')">Intermediate</b-nav-item>
+          <b-nav-item href="#game" @click="difficulty('normal')">Normal</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
     <MineGrid
+      id="game"
       :nb-cols="nbCols"
       :nb-rows="nbRows"
       :nb-bombs="nbBombs"
@@ -73,5 +81,7 @@ export default {
   .navbar {
     background-color: rgb(107, 84, 152);
   }
-
+  b-nav-item b-navbar-brand {
+    scroll-behavior: smooth;
+  }
 </style>

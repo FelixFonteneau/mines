@@ -348,7 +348,7 @@ export default {
   }
 
   .grid{
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6), -2px -2px 4px rgba(255, 255, 255, 0.7);
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.6), -4px -4px 6px rgba(255, 255, 255, 0.7);
     border-radius: 2px;
     text-align: center;
     display: flex;
