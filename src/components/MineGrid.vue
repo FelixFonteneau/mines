@@ -1,7 +1,7 @@
 <template>
   <div class="game">
     <div class="header">
-      <Help class="box">
+      <Help class="box help">
       </Help>
       <div class="bombsRemaining box">
         &#128163; {{bombsRemaining}}
@@ -33,7 +33,7 @@
       </Scores>
 
     </div>
-    <div class="grid" :style="getGridStyle()">
+    <div class="grid" :style="gridStyle">
       <MineCell
         v-for="(cell, i) in cellGrid"
         :key="i"
@@ -102,11 +102,21 @@ export default {
         centisecond: 0,
         totalCenti: 0
       },
-      newScore: false
+      newScore: false,
+      viewWidth: window.innerWidth,
+      viewHeight: window.innerHeight,
+      gridStyle: this.getGridStyle()
     }
   },
   mounted () {
     this.mountTheGrid()
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.onResize)
+    })
+    this.gridStyle = this.getGridStyle()
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.onResize)
   },
   methods: {
     mountTheGrid () {
@@ -133,10 +143,16 @@ export default {
       this.timerStop = true
       this.timerStart = false
       this.newScore = false
+      this.gridStyle = this.getGridStyle()
     },
     getGridStyle () {
-      return `grid-template-columns: repeat(${this.nbCols}, 1fr);
-              width: ${85 * this.nbCols / this.nbRows}vh;`
+      let dimension = ''
+      if ((this.nbCols / this.nbRows) > (this.viewWidth / this.viewHeight)) {
+        dimension = `width: 90vw;`
+      } else {
+        dimension = `width: ${80 * this.nbCols / this.nbRows}vh;`
+      }
+      return `grid-template-columns: repeat(${this.nbCols}, 1fr);` + dimension
     },
 
     initGrid (cell, index) {
@@ -167,28 +183,36 @@ export default {
         this.timerStop = false
       }
       if (!cell.isOpen) {
-        cell.isOpen = true
-        if (cell.hasBomb) {
-          this.smiley = 'dead'
+        this.openCell(cell, i)
+      } else if (cell.bombNb > 0 && cell.bombNb === this.getNumberNeighboursFlag(i)) {
+        this.openNeighbours(i)
+      }
+    },
+    openCell: function (cell, index) {
+      if (cell.hasFlag) {
+        return
+      }
+      cell.isOpen = true
+      if (cell.hasBomb) {
+        this.smiley = 'dead'
+        this.haveFinished = true
+        this.timerStop = true
+        this.haveWon = false
+        this.revealGrid()
+      } else {
+        cell.bombNb = this.getNumberNeighboursBombs(index)
+        this.cellRemaining--
+        if (this.cellRemaining === 0) {
           this.haveFinished = true
+          this.smiley = 'cool'
+          this.newScore = true
           this.timerStop = true
-          this.haveWon = false
-          this.revealGrid()
-        } else {
-          cell.bombNb = this.getNumberNeighboursBombs(i)
-          this.cellRemaining--
-          if (this.cellRemaining === 0) {
-            this.haveFinished = true
-            this.smiley = 'cool'
-            this.newScore = true
-            this.timerStop = true
-          }
-          // console.log('cell :' + i)
-          // console.log(' bombs :' + this.getNumberNeighboursBombs(i))
-          // console.log(this.getNeighboursIndex(i))
-          if (cell.bombNb === 0) {
-            this.openNeighbours(i)
-          }
+        }
+        // console.log('cell :' + i)
+        // console.log(' bombs :' + this.getNumberNeighboursBombs(i))
+        // console.log(this.getNeighboursIndex(i))
+        if (cell.bombNb === 0) {
+          this.openNeighbours(index)
         }
       }
     },
@@ -219,7 +243,9 @@ export default {
     openNeighbours (index) {
       let neighbours = this.getNeighboursIndex(index)
       for (let i = 0; i < neighbours.length; i++) {
-        this.clickCell(this.cellGrid[neighbours[i]], neighbours[i])
+        if (!this.cellGrid[neighbours[i]].isOpen) {
+          this.openCell(this.cellGrid[neighbours[i]], neighbours[i])
+        }
       }
     },
     /**
@@ -273,6 +299,10 @@ export default {
     },
     newTime: function (time) {
       this.time = time
+    },
+    onResize () {
+      this.viewWidth = window.innerWidth
+      this.viewHeight = window.innerHeight
     }
   },
   watch: {
@@ -287,6 +317,9 @@ export default {
     },
     restartGame () {
       this.restart()
+    },
+    viewWidth () {
+      this.gridStyle = this.getGridStyle()
     }
   }
 
@@ -316,15 +349,16 @@ export default {
   .box {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6), -2px -2px 4px rgba(255, 255, 255, 0.7);
     min-height: 30px;
-    width: 130px;
+    width: 16vw;
     margin: 7px auto;
-    padding: 10px;
-    font-size: 17px;
+    padding: inherit;
+    font-size: 2.5vw;
     background: #f5f5f5;
     border-radius: 10px;
-    vertical-align: middle;
     text-align: center;
+    vertical-align: middle;
     display:inline-block;
+    line-height:50px; /* centrage vertical */
   }
 
   .smiley{
@@ -380,6 +414,10 @@ export default {
 
   .scores{
     cursor: pointer;
+  }
+
+  .help, .timer, .scores{
+    line-height:45px; /* centrage vertical */
   }
 
 </style>

@@ -6,6 +6,9 @@
         <p>
           The goal is to open every empty cells and avoid bombs. If a cell have a number, it show the number of bombs within the 8 neighbouring cells.
         </p>
+        <p>
+          You can place a flag (<b class="flag">&#9873;</b>) with a right click if you think that a cell contains a bomb. It will help you remember the bomb's placement after.
+        </p>
         <ul>
           <li>
             &#128163; shows the number of bomb remaining.
@@ -50,11 +53,13 @@ export default {
     text-align: left;
     text-justify: distribute;
     margin-top: 5px;
+    font-size: 70%;
+    line-height:100%;
   }
   .helpDropdown{
     padding: 10px;
     position: absolute;
-    width: 25%;
+    width: 35%;
     z-index:10;
     top:150px;
     left:10px;

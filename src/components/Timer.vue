@@ -53,25 +53,28 @@ export default {
   mounted: function () {
     this.$interval = setInterval(() => {
       if (!this.stopped) {
-        this.centisecond++
         this.totalCenti++
-        if (this.centisecond > 99) {
-          this.second++
+        if (this.centisecond + 1 > 99) {
           this.centisecond = 0
-          if (this.second > 59) {
+          if (this.second + 1 > 59) {
             if (this.status === 'second') {
               this.status = 'minute'
             }
-            this.minute++
             this.second = 0
-            if (this.minute > 59) {
+            if (this.minute + 1 > 59) {
               if (this.status === 'minute') {
                 this.status = 'hour'
               }
               this.hour++
               this.minute = 0
+            } else {
+              this.minute++
             }
+          } else {
+            this.second++
           }
+        } else {
+          this.centisecond++
         }
       }
     }, 10)

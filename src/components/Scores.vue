@@ -37,7 +37,7 @@ export default {
       try {
         this.scores = JSON.parse(localStorage.getItem('scores'))
         this.showScores()
-        console.log(this.scores)
+        // console.log(this.scores)
       } catch (e) {
         localStorage.removeItem('scores')
       }
@@ -123,7 +123,7 @@ export default {
 <style scoped>
   .scoresHistory{
     position: absolute;
-    width: 25%;
+    width: 33%;
     z-index:10;
     top:150px;
     right:10px;
@@ -131,6 +131,8 @@ export default {
     background-color: white;
     cursor: initial;
     border-radius: 10px;
+    font-size: 70%;
+    line-height:100%;
   }
 
   .bestScore{
