@@ -8,7 +8,7 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-text>by</b-nav-text>
-          <b-nav-item href="#">Félix</b-nav-item>
+          <b-nav-item href="https://felixfonteneau.github.io/">Félix</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
