@@ -2,6 +2,7 @@
   <div>
     <div v-b-toggle.collapse-2 class="m-1"> <span class="bestScore">&#128285; {{bestScore}}</span></div>
     <b-collapse id="collapse-2" class="scoresHistory">
+      <p class="textHistory">Your best 5 times</p>
       <b-table striped hover :items="scoresSuitable"></b-table>
     </b-collapse>
   </div>
@@ -44,13 +45,12 @@ export default {
   },
   methods: {
     addTime () {
-      console.log('NEW SCORE :')
+      const date = new Date()
       const newScore = {
         time: this.newTime,
-        date: new Date().toDateString(),
+        date: (date.getUTCDate() < 10 ? '0' : '') + date.getUTCDate() + '/' + (date.getMonth() < 10 ? '0' : '') + date.getMonth() + '/' + date.getFullYear(),
         gameType: this.gameType
       }
-      console.log(newScore)
       const index = this.findIndex(this.newTime)
       if (index === this.scores.length || this.scores.length === 0) {
         this.scores.push(newScore)
@@ -64,8 +64,6 @@ export default {
       if (this.scores.length < 1) {
         return 0
       }
-      console.log('SCORES ACTUELS : ')
-      console.log(this.scores)
       for (let i = 0; i < this.scores.length; i++) {
         if (this.scores[i].time.totalCenti > newTime.totalCenti) {
           return i
@@ -92,6 +90,8 @@ export default {
                               (!this.scores[i].time.centisecond || this.scores[i].time.centisecond < 10 ? '0' : '') + this.scores[i].time.centisecond
           if (pos === 1) {
             this.bestScore = timeString
+          } else if (pos > 5) {
+            break
           }
           const row = {
             pos: pos++,
@@ -123,7 +123,7 @@ export default {
 <style scoped>
   .scoresHistory{
     position: absolute;
-    width: 33%;
+    width: 25%;
     z-index:10;
     top:150px;
     right:10px;
@@ -134,5 +134,10 @@ export default {
   }
 
   .bestScore{
+  }
+
+  .textHistory{
+    padding-top: 5px;
+    margin-top: 5px;
   }
 </style>
