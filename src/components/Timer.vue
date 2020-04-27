@@ -1,16 +1,16 @@
 <template>
   <div class="timer">
     <span class="inline">
-      &#x23F1;&#xFE0F;
+      <img src="../img/chrono.png" alt="chrono"/>
     </span>
     <span v-if="status === 'hour'" class="inline">
-      {{hour}}:
+       {{hour}}:
     </span>
     <span v-if="status !== 'second'" class="inline">
       <span v-if="(second < 10) && status === 'hour'" class="inline zero">
-        0
+         0
       </span>
-      {{minute}}:
+       {{minute}}:
     </span>
     <span  class="inline">
       <span v-if="(second < 10) && status !== 'second'" class="inline zero">
@@ -123,7 +123,6 @@ export default {
     padding-left: 0;
     vertical-align: middle;
     text-align: center;
-    display:inline-block;
   }
 
   .zero{

@@ -1,9 +1,18 @@
 <template>
   <div>
-    <div v-b-toggle.collapse-2 class="m-1"> <span class="bestScore">&#128285; {{bestScore}}</span></div>
+    <div v-b-toggle.collapse-2 class="m-1">
+      <span class="bestScore">
+        <img  src="../img/crown.png" alt="crown"/> {{bestScore}}
+      </span>
+    </div>
     <b-collapse id="collapse-2" class="scoresHistory">
-      <p class="textHistory">Your best 5 times</p>
-      <b-table striped hover :items="scoresSuitable"></b-table>
+      <div v-if="this.scoresSuitable.length > 0">
+        <p class="textHistory">Your best 5 times</p>
+        <b-table striped hover :items="scoresSuitable"></b-table>
+      </div>
+      <div v-else>
+        <p class="textHistory">You don't have any record for this game yet. <br/> Try to finish the game once!</p>
+      </div>
     </b-collapse>
   </div>
 </template>

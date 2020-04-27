@@ -4,20 +4,20 @@
       <Help class="box help">
       </Help>
       <div class="bombsRemaining box">
-        &#128163; {{bombsRemaining}}
+        <img  src="../img/bomb.png" alt="bomb"/> {{bombsRemaining}}
       </div>
       <div class="smiley box" @click="restart()">
         <span v-if="smiley === 'happy'">
-          &#128578;
+          <img src="../img/happy.png" alt="happy"/>
         </span>
         <span v-if="smiley === 'surprised'">
-          &#128558;
+          <img src="../img/surprised.png" alt="surprised"/>
         </span>
         <span v-if="smiley === 'dead'">
-          &#128555;
+          <img src="../img/dead.png" alt="dead"/>
         </span>
         <span v-if="smiley === 'cool'">
-          &#128526;
+          <img src="../img/cool.png" alt="cool"/>
         </span>
       </div>
       <div class="timer box">
@@ -36,27 +36,41 @@
         <MineCell
           v-for="(cell, i) in cellGrid"
           :key="i"
-          :hasBomb="cell.hasBomb"
-          :isOpen="cell.isOpen"
-          :hasFlag="cell.hasFlag"
-          :bombNb="cell.bombNb"
+          :cell="cell"
           :is-finished="haveFinished"
           :have-won="haveWon"
           @click.native="clickCell(cell, i)"
           @click.right.native="addFlag(cell)"
-          @dblclick.native.prevent="doubleClick(cell, i)"
+          @mousedown.native="mouseDown(cell)"
+          @mouseleave.native="mouseLeave(cell)"
           @contextmenu.native.prevent
         >
         </MineCell>
       </div>
     <b-modal
-      ref="winning-modal"
-      id="modal-center"
+    header-text-variant="success"
+    ref="winning-modal"
+    id="winning-modal"
+    hide-backdrop
+    content-class="shadow"
+    centered title="Congratulation!!!">
+    <p class="my-4">Congratulation, you have finnish the Minesweeper!</p>
+    <p class="my-4" v-if="nbRows < 14 || nbCols < 20 || nbBombs < 80"> You can now try harder levels ;)</p>
+    <template v-slot:modal-footer="{ok}">
+      <!-- Emulate built in modal footer ok and cancel button actions -->
+      <b-button size="sm" variant="light" @click="tryAgainModal()">
+        Try again ?
+      </b-button>
+    </template>
+  </b-modal>
+    <b-modal
+      header-text-variant="danger"
+      ref="loosing-modal"
+      id="loosing-modal"
       hide-backdrop
       content-class="shadow"
-      centered title="Congratulation!!!">
-      <p class="my-4">Congratulation, you have finnish the Minesweeper!</p>
-      <p class="my-4" v-if="nbRows < 14 || nbCols < 20 || nbBombs < 80"> You can now try harder level ;)</p>
+      centered title="You died!">
+      <p class="my-4">You exploded while clicking a bomb... <br/> You might be luckier soon ;)</p>
       <template v-slot:modal-footer="{ok}">
         <!-- Emulate built in modal footer ok and cancel button actions -->
         <b-button size="sm" variant="light" @click="tryAgainModal()">
@@ -120,7 +134,8 @@ export default {
       newScore: false,
       viewWidth: window.innerWidth,
       viewHeight: window.innerHeight,
-      gridStyle: this.getGridStyle()
+      gridStyle: this.getGridStyle(),
+      cellDown: null
     }
   },
   mounted () {
@@ -141,7 +156,8 @@ export default {
           hasBomb: false,
           isOpen: false,
           hasFlag: false,
-          bombNb: 0
+          bombNb: 0,
+          pressed: false
         })
       }
     },
@@ -210,13 +226,18 @@ export default {
         return
       }
       cell.isOpen = true
+      if (cell.pressed) {
+        cell.pressed = false
+      }
       if (cell.hasBomb) {
+        this.$refs['loosing-modal'].show()
         this.smiley = 'dead'
         this.haveFinished = true
         this.timerStop = true
         this.haveWon = false
         this.revealGrid()
       } else {
+        this.smiley = 'happy'
         cell.bombNb = this.getNumberNeighboursBombs(index)
         this.cellRemaining--
         if (this.cellRemaining === 0) {
@@ -239,7 +260,7 @@ export default {
       const confetti = require('canvas-confetti')
       let canvas = document.getElementById('firework-canvas')
       // canvas.style.visibility = 'visible'
-      var myConfetti = confetti.create(canvas, {
+      let myConfetti = confetti.create(canvas, {
         resize: true,
         useWorker: true
       })
@@ -265,6 +286,24 @@ export default {
       if (!this.haveFinished && this.haveBegun && cell.isOpen) {
         if (cell.bombNb === this.getNumberNeighboursFlag(index)) {
           this.openNeighbours(index)
+        }
+      }
+    },
+    mouseDown (cell) {
+      if (!cell.isOpen && this.cellDown === null) {
+        this.cellDown = cell
+        cell.pressed = true
+        this.smiley = 'surprised'
+      }
+    },
+    mouseLeave (cell) {
+      if (this.cellDown !== null) {
+        this.cellDown = null
+        cell.pressed = false
+        if (this.haveWon) {
+          this.smiley = 'happy'
+        } else {
+          this.smiley = 'dead'
         }
       }
     },
@@ -341,7 +380,8 @@ export default {
     },
     tryAgainModal () {
       this.restart()
-      this.$bvModal.hide('modal-center')
+      this.$bvModal.hide('winning-modal')
+      this.$bvModal.hide('loosing-modal')
     }
   },
   watch: {
@@ -470,21 +510,8 @@ export default {
     left: 0px;
   }
 
-  .wining-box{
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6), -2px -2px 4px rgba(255, 255, 255, 0.7);
-    min-height: 30px;
-    width: 16vw;
-    margin: 7px auto;
-    padding: inherit;
-    font-size: 1.7vw;
-    background: #f5f5f5;
-    border-radius: 10px;
-    text-align: center;
-    vertical-align: middle;
+  img {
+    height: 1.7vw;
+    margin-top: -5px;
   }
-
 </style>

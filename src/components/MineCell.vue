@@ -1,13 +1,16 @@
 <template>
-  <div class="cell" :class="getClass()">
-    <div v-if="hasFlag">
-      &#9873;
+  <div class="cell"
+       :class="getClass()"
+       >
+
+  <div v-if="cell.hasFlag">
+    <img class="img-cell"  src="../img/flag.png" alt="flag"/>
     </div>
-    <div v-if="hasBomb && isOpen">
-      &#128163;
+    <div v-if="cell.hasBomb && cell.isOpen">
+      <img class="img-cell" src="../img/bomb.png" alt="bomb"/>
     </div>
-    <div v-if="isOpen && bombNb">
-      {{ bombNb }}
+    <div v-if="cell.isOpen && cell.bombNb">
+      {{ cell.bombNb }}
     </div>
   </div>
 </template>
@@ -16,20 +19,8 @@
 export default {
   name: 'MineCell',
   props: {
-    isOpen: {
-      type: Boolean,
-      required: true
-    },
-    hasBomb: {
-      type: Boolean,
-      required: true
-    },
-    hasFlag: {
-      type: Boolean,
-      required: true
-    },
-    bombNb: {
-      type: Number,
+    cell: {
+      type: Object,
       required: true
     },
     isFinished: {
@@ -44,33 +35,36 @@ export default {
   methods: {
     getClass () {
       if (this.isFinished) {
-        if (this.hasFlag && !this.hasBomb) {
+        if (this.cell.hasFlag && !this.cell.hasBomb) {
           return 'flag open'
         }
-        if (this.hasBomb && !this.haveWon) {
+        if (this.cell.hasBomb && !this.haveWon) {
           return 'bomb'
         }
-        if (this.hasBomb && this.haveWon) {
+        if (this.cell.hasBomb && this.haveWon) {
           return 'flag'
         }
-        if (this.hasFlag) {
+        if (this.cell.hasFlag) {
           return 'flag'
         }
-        if (!this.isOpen) {
+        if (!this.cell.isOpen) {
           return 'notClickable'
         }
-        if (this.isOpen && this.haveWon) {
-          return 'open nb' + this.bombNb + ' won'
+        if (this.cell.isOpen && this.haveWon) {
+          return 'open nb' + this.cell.bombNb + ' won'
         }
       }
-      if (this.isOpen && this.hasBomb) {
+      if (this.cell.isOpen && this.cell.hasBomb) {
         return 'bomb'
       }
-      if (this.isOpen) {
-        return 'open nb' + this.bombNb
+      if (this.cell.isOpen) {
+        return 'open nb' + this.cell.bombNb
       }
-      if (this.hasFlag) {
+      if (this.cell.hasFlag) {
         return 'flag'
+      }
+      if (this.cell.pressed) {
+        return 'pressed'
       }
       return ''
     }
@@ -140,6 +134,16 @@ export default {
 
   .won{
     background: rgba(119, 255, 111, 0.12);
+  }
+
+  .pressed{
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px inset white;
+  }
+
+  .img-cell{
+    height: 1.2vw;
+
   }
 
 </style>
