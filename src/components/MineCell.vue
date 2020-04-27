@@ -138,7 +138,7 @@ export default {
 
   .pressed{
     background: rgba(0, 0, 0, 0.3);
-    border: 2px inset white;
+    border: 1px inset white;
   }
 
   .img-cell{
