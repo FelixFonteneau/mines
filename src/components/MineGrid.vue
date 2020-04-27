@@ -78,9 +78,9 @@
         </b-button>
       </template>
     </b-modal>
-    <canvas id="firework-canvas" v-if="haveFinished"></canvas>
+    <canvas id="firework-canvas"  v-if="haveFinished"></canvas>
+    <div ref="footer" class="empty"></div>
   </div>
-
 </template>
 
 <script>
@@ -88,6 +88,7 @@ import MineCell from './MineCell'
 import Timer from './Timer'
 import Scores from './Scores'
 import Help from './Help'
+import scrollTo from '../js/scroll'
 
 export default {
   name: 'MineGrid',
@@ -164,6 +165,10 @@ export default {
     restart () {
       // let canvas = document.getElementById('firework-canvas')
       // canvas.style.visibility = 'hidden'
+      // if (document.body.scrollHeight) {
+      //   window.scrollTo(0, document.body.scrollHeight)
+      // }
+      scrollTo(this.$refs.footer, 1000)
       this.haveBegun = false
       this.haveFinished = false
       this.haveWon = true
@@ -179,15 +184,8 @@ export default {
       this.gridStyle = this.getGridStyle()
     },
     getGridStyle () {
-      let dimension = ''
-      if ((this.nbCols / this.nbRows) > (this.viewWidth / this.viewHeight)) {
-        dimension = `width: 90vw;`
-      } else {
-        dimension = `width: ${80 * this.nbCols / this.nbRows}vh;`
-      }
-      return `grid-template-columns: repeat(${this.nbCols}, 1fr);` + dimension
+      return `grid-template-columns: repeat(${this.nbCols}, 1fr);`
     },
-
     initGrid (cell, index) {
       let i = 0
       while (i < this.nbBombs) {
@@ -513,5 +511,11 @@ export default {
   img {
     height: 1.7vw;
     margin-top: -5px;
+  }
+
+  .empty{
+    margin: 0;
+    padding: 0;
+    height: 0;
   }
 </style>
