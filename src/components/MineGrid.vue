@@ -31,25 +31,40 @@
         :game-type="{nbCols: nbCols, nbRows: nbRows, nbBombs: nbBombs}">
 
       </Scores>
-
     </div>
     <div class="grid" :style="gridStyle">
-      <MineCell
-        v-for="(cell, i) in cellGrid"
-        :key="i"
-        :hasBomb="cell.hasBomb"
-        :isOpen="cell.isOpen"
-        :hasFlag="cell.hasFlag"
-        :bombNb="cell.bombNb"
-        :is-finished="haveFinished"
-        :have-won="haveWon"
-        @click.native="clickCell(cell, i)"
-        @click.right.native="addFlag(cell)"
-        @dblclick.native.prevent="doubleClick(cell, i)"
-        @contextmenu.native.prevent
-      >
-      </MineCell>
-    </div>
+        <MineCell
+          v-for="(cell, i) in cellGrid"
+          :key="i"
+          :hasBomb="cell.hasBomb"
+          :isOpen="cell.isOpen"
+          :hasFlag="cell.hasFlag"
+          :bombNb="cell.bombNb"
+          :is-finished="haveFinished"
+          :have-won="haveWon"
+          @click.native="clickCell(cell, i)"
+          @click.right.native="addFlag(cell)"
+          @dblclick.native.prevent="doubleClick(cell, i)"
+          @contextmenu.native.prevent
+        >
+        </MineCell>
+      </div>
+    <b-modal
+      ref="winning-modal"
+      id="modal-center"
+      hide-backdrop
+      content-class="shadow"
+      centered title="Congratulation!!!">
+      <p class="my-4">Congratulation, you have finnish the Minesweeper!</p>
+      <p class="my-4" v-if="nbRows < 14 || nbCols < 20 || nbBombs < 80"> You can now try harder level ;)</p>
+      <template v-slot:modal-footer="{ok}">
+        <!-- Emulate built in modal footer ok and cancel button actions -->
+        <b-button size="sm" variant="light" @click="tryAgainModal()">
+          Try again ?
+        </b-button>
+      </template>
+    </b-modal>
+    <canvas id="firework-canvas" v-if="haveFinished"></canvas>
   </div>
 
 </template>
@@ -131,6 +146,8 @@ export default {
       }
     },
     restart () {
+      // let canvas = document.getElementById('firework-canvas')
+      // canvas.style.visibility = 'hidden'
       this.haveBegun = false
       this.haveFinished = false
       this.haveWon = true
@@ -203,10 +220,7 @@ export default {
         cell.bombNb = this.getNumberNeighboursBombs(index)
         this.cellRemaining--
         if (this.cellRemaining === 0) {
-          this.haveFinished = true
-          this.smiley = 'cool'
-          this.newScore = true
-          this.timerStop = true
+          this.winGame()
         }
         // console.log('cell :' + i)
         // console.log(' bombs :' + this.getNumberNeighboursBombs(i))
@@ -215,6 +229,27 @@ export default {
           this.openNeighbours(index)
         }
       }
+    },
+    winGame () {
+      this.haveFinished = true
+      this.smiley = 'cool'
+      this.newScore = true
+      this.timerStop = true
+      // launch firework
+      const confetti = require('canvas-confetti')
+      let canvas = document.getElementById('firework-canvas')
+      // canvas.style.visibility = 'visible'
+      var myConfetti = confetti.create(canvas, {
+        resize: true,
+        useWorker: true
+      })
+      myConfetti({
+        particleCount: 170,
+        spread: 180
+        // any other options from the global
+        // confetti function
+      })
+      this.$refs['winning-modal'].show()
     },
     addFlag (cell) {
       if (!this.haveFinished && this.haveBegun && !cell.isOpen) {
@@ -303,6 +338,10 @@ export default {
     onResize () {
       this.viewWidth = window.innerWidth
       this.viewHeight = window.innerHeight
+    },
+    tryAgainModal () {
+      this.restart()
+      this.$bvModal.hide('modal-center')
     }
   },
   watch: {
@@ -352,8 +391,9 @@ export default {
     width: 16vw;
     margin: 7px auto;
     padding: inherit;
-    font-size: 2.5vw;
-    background: #f5f5f5;
+    font-size: 1.7vw;
+    background-color: white;
+    /* background: #f5f5f5; */
     border-radius: 10px;
     text-align: center;
     vertical-align: middle;
@@ -418,6 +458,33 @@ export default {
 
   .help, .timer, .scores{
     line-height:45px; /* centrage vertical */
+  }
+
+  #firework-canvas{
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index:10;
+    top:120px;
+    left: 0px;
+  }
+
+  .wining-box{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6), -2px -2px 4px rgba(255, 255, 255, 0.7);
+    min-height: 30px;
+    width: 16vw;
+    margin: 7px auto;
+    padding: inherit;
+    font-size: 1.7vw;
+    background: #f5f5f5;
+    border-radius: 10px;
+    text-align: center;
+    vertical-align: middle;
   }
 
 </style>

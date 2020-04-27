@@ -50,11 +50,17 @@ export default {
         if (this.hasBomb && !this.haveWon) {
           return 'bomb'
         }
+        if (this.hasBomb && this.haveWon) {
+          return 'flag'
+        }
         if (this.hasFlag) {
           return 'flag'
         }
         if (!this.isOpen) {
           return 'notClickable'
+        }
+        if (this.isOpen && this.haveWon) {
+          return 'open nb' + this.bombNb + ' won'
         }
       }
       if (this.isOpen && this.hasBomb) {
@@ -130,6 +136,10 @@ export default {
   }
   .nb8 {
     color: rgba(70, 70, 70, 0.61);
+  }
+
+  .won{
+    background: rgba(119, 255, 111, 0.12);
   }
 
 </style>
