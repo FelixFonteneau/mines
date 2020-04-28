@@ -54,7 +54,7 @@
     hide-backdrop
     content-class="shadow"
     centered title="Congratulation!!!">
-    <p class="my-4">Congratulation, you have finnish the Minesweeper!</p>
+    <p class="my-4">Congratulation, you have finish the Minesweeper!</p>
     <p class="my-4" v-if="nbRows < 14 || nbCols < 20 || nbBombs < 80"> You can now try harder levels ;)</p>
     <template v-slot:modal-footer="{ok}">
       <!-- Emulate built in modal footer ok and cancel button actions -->
@@ -168,7 +168,7 @@ export default {
       // if (document.body.scrollHeight) {
       //   window.scrollTo(0, document.body.scrollHeight)
       // }
-      scrollTo(this.$refs.footer, 1000)
+      scrollTo(this.$refs.footer, 300)
       this.haveBegun = false
       this.haveFinished = false
       this.haveWon = true
@@ -184,7 +184,13 @@ export default {
       this.gridStyle = this.getGridStyle()
     },
     getGridStyle () {
-      return `grid-template-columns: repeat(${this.nbCols}, 1fr);`
+      let dimension = ''
+      if ((this.nbCols / this.nbRows) > (this.viewWidth / this.viewHeight)) {
+        dimension = `width: 85vw;`
+      } else {
+        dimension = `width: ${80 * this.nbCols / this.nbRows}vh;`
+      }
+      return `grid-template-columns: repeat(${this.nbCols}, 1fr);` + dimension
     },
     initGrid (cell, index) {
       let i = 0

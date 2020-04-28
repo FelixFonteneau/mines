@@ -17,10 +17,10 @@
             <img class="small-img" src="../img/happy.png" alt="face"/> shows the status of the game. Click on it to restart the game.
           </li>
           <li>
-            <img class="small-img" src="../img/chrono.png" alt="chrono"/> is a chronometer and shows the time since the beginning.
+            <img class="small-img" src="../img/chrono.png" alt="chrono"/> is a timer and shows the time since the beginning.
           </li>
           <li>
-            <img class="small-img" src="../img/crown.png" alt="crown"/> is the best time of the current game. Click on it to see the local leaderboard with your best times resolving the minesweeper.
+            <img class="small-img" src="../img/crown.png" alt="crown"/> is your best time of the current game. Click on it to see the local leaderboard with your best times resolving the minesweeper.
           </li>
         </ul>
       </div>

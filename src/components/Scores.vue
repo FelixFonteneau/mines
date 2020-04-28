@@ -11,7 +11,7 @@
         <b-table striped hover :items="scoresSuitable"></b-table>
       </div>
       <div v-else>
-        <p class="textHistory">You don't have any record for this game yet. <br/> Try to finish the game once!</p>
+        <p class="textHistory">You don't have any record on this game yet. <br/> Try to finish the grid once!</p>
       </div>
     </b-collapse>
   </div>
