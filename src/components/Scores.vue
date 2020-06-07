@@ -47,7 +47,7 @@ export default {
     return {
       scores: [],
       scoresSuitable: [],
-      listStyle: 'height=53%;',
+      listStyle: '',
       bestScore: '',
       visible: false
     }
@@ -127,7 +127,7 @@ export default {
     getListStyle () {
       let style = ''
       if (this.scoresSuitable.length > 10) {
-        style = 'overflow-y: scroll;height: 53%;'
+        style = 'overflow-y: scroll;height: 62vh;'
       } else {
         style = ''
       }
@@ -163,12 +163,12 @@ export default {
     top:150px;
     right:10px;
     opacity: 1;
-    max-height: 53%;
+    max-height: 62vh;
     background-color: white;
     cursor: initial;
     border-radius: 10px;
-    font-size: 70%;
-    line-height:100%;
+    font-size: 1.75vh;
+    line-height: 2.5vh;
   }
 
   .bestScore{
