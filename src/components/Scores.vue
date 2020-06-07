@@ -1,13 +1,18 @@
 <template>
   <div>
-    <div v-b-toggle.collapse-2 class="m-1">
+    <div
+      :aria-expanded="visible ? 'true' : 'false'"
+      :class="visible ? null : 'collapsed'"
+      @click="visible = !visible"
+      aria-controls="collapse-2"
+      class="m-1">
       <span class="bestScore">
         <img  src="../img/crown.png" alt="crown"/> {{bestScore}}
       </span>
     </div>
-    <b-collapse id="collapse-2" class="scoresHistory" :style="listStyle">
+    <b-collapse id="collapse-2" class="scoresHistory" :style="listStyle" v-model="visible">
       <div v-if="this.scoresSuitable.length > 0" >
-        <p class="textHistory">Your best 5 times</p>
+        <p class="textHistory">Your best times</p>
         <b-table striped hover :items="scoresSuitable" ></b-table>
       </div>
       <div v-else>
@@ -32,6 +37,10 @@ export default {
     gameType: {
       type: Object,
       required: true
+    },
+    hide: {
+      type: Boolean,
+      required: true
     }
   },
   data: function () {
@@ -39,7 +48,8 @@ export default {
       scores: [],
       scoresSuitable: [],
       listStyle: 'height=53%;',
-      bestScore: ''
+      bestScore: '',
+      visible: false
     }
   },
   mounted () {
@@ -134,6 +144,11 @@ export default {
     gameType () {
       this.showScores()
       this.listStyle = this.getListStyle()
+    },
+    hide () {
+      if (this.visible && this.hide) {
+        this.visible = false
+      }
     }
   }
 }

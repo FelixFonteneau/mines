@@ -1,7 +1,12 @@
 <template>
   <div>
-    <div v-b-toggle.collapse-1 class="m-1 help"> <span class="bestScore"><img  src="../img/question.png" alt="question"/></span></div>
-    <b-collapse id="collapse-1" class="helpDropdown">
+    <div :aria-expanded="visible ? 'true' : 'false'"
+         :class="visible ? null : 'collapsed'"
+         @click="visible = !visible"
+         aria-controls="collapse-1" class="m-1 help">
+      <span class="bestScore"><img  src="../img/question.png" alt="question"/></span>
+    </div>
+    <b-collapse id="collapse-1" class="helpDropdown" v-model="visible">
       <div class="textHelp">
         <p>
           The goal is to open every empty cells and avoid bombs. If a cell have a number, it show the number of bombs within the 8 neighbouring cells.
@@ -31,14 +36,28 @@
 <script>
 export default {
   name: 'Help',
+  props: {
+    hide: {
+      type: Boolean,
+      required: true
+    }
+  },
   data: function () {
     return {
+      visible: false
     }
   },
   mounted () {
 
   },
   methods: {
+  },
+  watch: {
+    hide () {
+      if (this.visible && this.hide) {
+        this.visible = false
+      }
+    }
   }
 }
 </script>

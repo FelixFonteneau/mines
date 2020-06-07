@@ -1,7 +1,8 @@
 <template>
   <div class="game">
     <div class="header">
-      <Help class="box help">
+      <Help class="box help"
+            :hide="haveBegun">
       </Help>
       <div class="bombsRemaining box">
         <img  src="../img/bomb.png" alt="bomb"/> {{bombsRemaining}}
@@ -28,8 +29,8 @@
         class="box scores"
         :new-time="time"
         :new-score="newScore"
-        :game-type="{nbCols: nbCols, nbRows: nbRows, nbBombs: nbBombs}">
-
+        :game-type="{nbCols: nbCols, nbRows: nbRows, nbBombs: nbBombs}"
+        :hide="haveBegun">
       </Scores>
     </div>
     <div class="grid" :style="gridStyle">
@@ -421,7 +422,6 @@ export default {
   .header > * {
     background-color: #b74e91;
     width: 100px;
-    display: inline-block;
     display: inline;
     vertical-align: baseline;
     margin-top: auto;
@@ -456,9 +456,9 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-right: 0px;
-    margin-left: 0px;
-    padding: 0px;
+    margin-right: 0;
+    margin-left: 0;
+    padding: 0;
   }
   .game >  {
     flex: 1;
@@ -469,9 +469,7 @@ export default {
     box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.6), -4px -4px 6px rgba(255, 255, 255, 0.7);
     border-radius: 2px;
     text-align: center;
-    display: flex;
     justify-content: space-between;
-    position: absolute;
     width: 100vh;
     margin: 0 auto;
     margin-top: 1%;
@@ -506,12 +504,11 @@ export default {
 
   #firework-canvas{
     position: absolute;
-    left: 0px;
     width: 100%;
     height: 100%;
     z-index:10;
     top:120px;
-    left: 0px;
+    left: 0;
   }
 
   img {
