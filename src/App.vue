@@ -43,9 +43,9 @@ export default {
   },
   data: function () {
     return {
-      nbCols: 10,
-      nbRows: 8,
-      nbBombs: 10,
+      nbCols: 30,
+      nbRows: 16,
+      nbBombs: 99,
       restart: false
     }
   },
