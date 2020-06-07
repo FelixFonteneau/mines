@@ -169,6 +169,7 @@ export default {
     border-radius: 10px;
     font-size: 1.75vh;
     line-height: 2.5vh;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6), -2px -2px 4px rgba(255, 255, 255, 0.5);
   }
 
   .bestScore{
