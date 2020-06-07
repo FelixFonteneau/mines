@@ -1,6 +1,6 @@
 # mines
 
-> A Vue.js project
+> A Vue.js project based on webpack.
 
 ## Build Setup
 
