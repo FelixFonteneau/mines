@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="selection">
-      <b-button v-b-toggle.collapse-1-inner size="sm">Toggle Inner Collapse</b-button>
+      <b-button v-b-toggle.collapse-1-inner size="sm">
+        <b-icon icon="gear-fill" aria-hidden="true"></b-icon> Settings
+      </b-button>
       <b-collapse id="collapse-1-inner" class="mt-2">
         <b-container class="">
           <b-row>
@@ -36,8 +38,9 @@
           </b-row>
         </b-container>
         <div>
-          <b-button block class="generate-button">Generate the Grid</b-button>
-        </div>      </b-collapse>
+          <b-button class="generate-button">Generate the Grid</b-button>
+        </div>
+      </b-collapse>
 
     </div>
     <MineGrid
@@ -92,7 +95,6 @@ export default {
     color: white;
   }
   .generate-button{
-    width: 60%;
     margin: 10px auto;
   }
   .selection{
