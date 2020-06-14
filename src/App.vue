@@ -14,61 +14,29 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown text="Difficulty" right>
-            <b-dropdown-item href="#game" @click="difficulty('easy')">Easy</b-dropdown-item>
-            <b-dropdown-item href="#game" @click="difficulty('intermediate')">Intermediate</b-dropdown-item>
-            <b-dropdown-item href="#game" @click="difficulty('normal')">Normal</b-dropdown-item>
+            <b-dropdown-item to="easy">Easy</b-dropdown-item>
+            <b-dropdown-item to="medium">Intermediate</b-dropdown-item>
+            <b-dropdown-item to="normal">Normal</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <MineGrid
-      id="game"
-      :nb-cols="nbCols"
-      :nb-rows="nbRows"
-      :nb-bombs="nbBombs"
-      :restart-game="restart"
-    ></MineGrid>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import MineCell from './components/MineCell'
-import MineGrid from './components/MineGrid'
 
 export default {
   name: 'App',
   components: {
-    MineCell,
-    MineGrid
+
   },
   data: function () {
     return {
-      nbCols: 30,
-      nbRows: 16,
-      nbBombs: 99,
-      restart: false
     }
   },
   methods: {
-    difficulty (diff) {
-      if (diff === 'easy') {
-        this.nbCols = 10
-        this.nbRows = 8
-        this.nbBombs = 10
-      } else if (diff === 'intermediate') {
-        this.nbCols = 16
-        this.nbRows = 14
-        this.nbBombs = 40
-      } else if (diff === 'normal') {
-        this.nbCols = 30
-        this.nbRows = 16
-        this.nbBombs = 99
-      }
-      this.restart = true
-      setTimeout(function () {
-        this.restart = false
-      }, 10)
-    }
   }
 }
 </script>

@@ -21,7 +21,7 @@
     "canvas-confetti": "^1.2.0",
     "portal-vue": "^2.1.7",
     "vue": "^2.6.11",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.3.4"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
