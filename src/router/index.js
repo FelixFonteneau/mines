@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Welcome from '../components/Welcome'
 import MineGrid from '../components/MineGrid'
+import CustomGame from '../components/CustomGame'
 
 Vue.use(Router)
 
@@ -43,7 +44,10 @@ export default new Router({
         nbBombs: 99,
         restartGame: false
       }
-
+    }, {
+      path: '/custom',
+      name: 'gameCustom',
+      component: CustomGame
     }
   ]
 })

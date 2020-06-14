@@ -17,6 +17,7 @@
             <b-dropdown-item to="easy">Easy</b-dropdown-item>
             <b-dropdown-item to="medium">Intermediate</b-dropdown-item>
             <b-dropdown-item to="normal">Normal</b-dropdown-item>
+            <b-dropdown-item to="custom">Custom</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
