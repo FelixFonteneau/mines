@@ -40,6 +40,7 @@
           :cell="cell"
           :is-finished="haveFinished"
           :have-won="haveWon"
+          :style="getCellStyle()"
           @click.native="clickCell(cell, i)"
           @click.right.native="addFlag(cell)"
           @mousedown.native="mouseDown(cell)"
@@ -192,6 +193,15 @@ export default {
         dimension = `width: ${80 * this.nbCols / this.nbRows}vh;`
       }
       return `grid-template-columns: repeat(${this.nbCols}, 1fr);` + dimension
+    },
+    getCellIconStyle () {
+      let dimension = ''
+      if ((this.nbCols / this.nbRows) > (this.viewWidth / this.viewHeight)) {
+        dimension = `height: 10vw;`
+      } else {
+        dimension = `height: ${10 * this.nbCols / this.nbRows}vh;`
+      }
+      return dimension
     },
     initGrid (cell, index) {
       let i = 0
@@ -375,6 +385,15 @@ export default {
         }
       }
       return nbBombs
+    },
+    getCellStyle () {
+      let dimension = ''
+      if ((this.nbCols / this.nbRows) > (this.viewWidth / this.viewHeight)) {
+        dimension = `font-size: 0.85vw;`
+      } else {
+        dimension = `font-size: ${1.5 * this.nbCols / this.nbRows}vh;`
+      }
+      return dimension // "font-size: ' + (450 / (this.nbCols * this.nbRows)) + 'em;'
     },
     newTime: function (time) {
       this.time = time

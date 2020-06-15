@@ -6,11 +6,13 @@
   <div v-if="cell.hasFlag">
     <img class="img-cell"  src="../img/flag.png" alt="flag"/>
     </div>
-    <div v-if="cell.hasBomb && cell.isOpen">
+    <div v-else-if="cell.hasBomb && cell.isOpen">
       <img class="img-cell" src="../img/bomb.png" alt="bomb"/>
     </div>
-    <div v-if="cell.isOpen && cell.bombNb">
+    <div v-else-if="cell.isOpen && cell.bombNb">
       {{ cell.bombNb }}
+    </div>
+    <div v-else>
     </div>
   </div>
 </template>
@@ -79,11 +81,9 @@ export default {
     border: 2px outset white;
     cursor: pointer;
     display: flex;
-    font-size: 1.3em;
     justify-content: center;
     min-height: 10px;
     min-width: 10px;
-    font-size: 2.5vh;
     border-radius: 2px;
   }
 
@@ -143,7 +143,6 @@ export default {
 
   .img-cell{
     height: 1.2vw;
-
   }
 
 </style>

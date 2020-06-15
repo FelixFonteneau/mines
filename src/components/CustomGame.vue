@@ -8,9 +8,7 @@
         <b-container class="">
           <b-row>
             <b-col class="center-bottom">
-              <div class="center-bottom-text">
-                Rows number
-              </div>
+              Rows number
             </b-col>
             <b-col class="center-bottom">
               Columns number
@@ -21,24 +19,35 @@
           </b-row>
           <b-row class="cursors">
             <b-col>
-              <b-input-group prepend="0" append="100" class="mt-3">
-                <b-form-input v-model="value" type="range" min="0" max="100" step="1"></b-form-input>
+              <b-input-group prepend="3" :append="maxRows.toString()" class="mt-3">
+                <b-form-input v-model="rowsSelected" type="range" min="2" :max="maxRows" step="1"></b-form-input>
               </b-input-group>
             </b-col>
             <b-col>
-              <b-input-group prepend="0" append="100" class="mt-3">
-                <b-form-input v-model="value" type="range" min="0" max="100" step="1"></b-form-input>
+              <b-input-group prepend="3" :append="maxCols.toString()" class="mt-3">
+                <b-form-input v-model="colsSelected" type="range" min="3" :max="maxCols" step="1"></b-form-input>
               </b-input-group>
             </b-col>
             <b-col>
-              <b-input-group prepend="0" append="100" class="mt-3">
-                <b-form-input v-model="value" type="range" min="0" max="100" step="1"></b-form-input>
+              <b-input-group prepend="0" :append="getMaxBomb()" class="mt-3">
+                <b-form-input v-model="bombSelected" type="range" min="0" :max="getMaxBomb()" step="1"></b-form-input>
               </b-input-group>
+            </b-col>
+          </b-row>
+          <b-row class="">
+            <b-col class="center-bottom">
+              {{rowsSelected}}
+            </b-col>
+            <b-col class="center-bottom">
+              {{colsSelected}}
+            </b-col>
+            <b-col class="center-bottom">
+              {{bombSelected}}
             </b-col>
           </b-row>
         </b-container>
         <div>
-          <b-button class="generate-button">Generate the Grid</b-button>
+          <b-button class="generate-button" @click="generateGrid()">Generate the Grid</b-button>
         </div>
       </b-collapse>
 
@@ -62,25 +71,45 @@ export default {
   },
   data: function () {
     return {
+      rowsSelected: 0,
+      colsSelected: 0,
+      bombSelected: 0,
+      bombSelectedString: '',
+      maxCols: 40,
+      maxRows: 40,
       nbCols: 30,
       nbRows: 16,
       nbBombs: 99,
       restartGame: false
     }
   },
+  mounted () {
+    this.rowsSelected = this.nbRows
+    this.colsSelected = this.nbCols
+    this.bombSelected = this.nbBombs
+    window.addEventListener('resize', this.handleResize)
+    this.handleResize()
+  },
   methods: {
-    mountTheGrid () {
-      this.cellGrid = []
-      for (let i = 0; i < this.gridSize; i += 1) {
-        this.cellGrid.push({
-          hasBomb: false,
-          isOpen: false,
-          hasFlag: false,
-          bombNb: 0,
-          pressed: false
-        })
-      }
+    getMaxBomb () {
+      return (this.rowsSelected * this.colsSelected - 9).toString()
+    },
+    generateGrid () {
+      this.nbCols = parseInt(this.colsSelected)
+      this.nbRows = parseInt(this.rowsSelected)
+      this.nbBombs = parseInt(this.bombSelected)
+      this.restart = true
+      setTimeout(this.resetRestart, 10)
+    },
+    resetRestart () {
+      this.restart = false
+    },
+    handleResize () {
+      this.maxCols = Math.round(window.innerWidth / window.innerHeight * this.maxRows)
     }
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.handleResize)
   }
 }
 </script>
