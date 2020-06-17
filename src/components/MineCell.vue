@@ -92,22 +92,22 @@ export default {
         return 'pressed'
       }
       return ''
-    },
+    }, // TODO remake the style
     getCellStyle () {
       let dimension = ''
-      if ((this.gridDimension[0] / this.gridDimension[1]) > (this.viewWidth / this.viewHeight)) {
-        dimension = `font-size: 0.95vw;`
+      if ((this.gridDimension[0] / this.gridDimension[1]) > (window.innerWidth / window.innerHeight)) {
+        dimension = `font-size: ${2.5 * this.gridDimension[1] / this.gridDimension[0]}vw;`
       } else {
-        dimension = `font-size: ${0.9 * this.gridDimension[0] / this.gridDimension[1]}vh;`
+        dimension = `font-size: ${1.5 * this.gridDimension[0] / this.gridDimension[1]}vh;`
       }
       return dimension // "font-size: ' + (450 / (this.nbCols * this.nbRows)) + 'em;'
     },
     getImageHeight () {
       let height
       if ((this.gridDimension[0] / this.gridDimension[1]) > (this.viewWidth / this.viewHeight)) {
-        height = 0.012 * window.innerWidth
+        height = 0.01 * window.innerWidth
       } else {
-        height = 0.012 * this.gridDimension[0] / this.gridDimension[1] * window.innerHeight
+        height = 0.01 * this.gridDimension[0] / this.gridDimension[1] * window.innerHeight
       }
       return Math.floor(height)
     },
