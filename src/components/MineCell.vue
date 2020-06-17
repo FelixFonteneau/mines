@@ -1,13 +1,20 @@
 <template>
   <div class="cell"
        :class="getClass()"
+       :style="getCellStyle()"
        >
 
   <div v-if="cell.hasFlag">
-    <img class="img-cell"  src="../img/flag.png" alt="flag"/>
+    <img class="img-cell"
+         src="../img/flag.png"
+         alt="flag"
+         :height="imgHeight"/>
     </div>
     <div v-else-if="cell.hasBomb && cell.isOpen">
-      <img class="img-cell" src="../img/bomb.png" alt="bomb"/>
+      <img class="img-cell"
+           src="../img/bomb.png"
+           alt="bomb"
+           :height="imgHeight"/>
     </div>
     <div v-else-if="cell.isOpen && cell.bombNb">
       {{ cell.bombNb }}
@@ -32,7 +39,23 @@ export default {
     haveWon: {
       type: Boolean,
       required: true
+    },
+    gridDimension: {
+      type: Array,
+      required: true
     }
+  },
+  data: function () {
+    return {
+      imgHeight: 0
+    }
+  },
+  created () {
+    window.addEventListener('resize2', this.handleResize)
+    this.handleResize()
+  },
+  destroyed () {
+    window.removeEventListener('resize2', this.handleResize)
   },
   methods: {
     getClass () {
@@ -69,6 +92,27 @@ export default {
         return 'pressed'
       }
       return ''
+    },
+    getCellStyle () {
+      let dimension = ''
+      if ((this.gridDimension[0] / this.gridDimension[1]) > (this.viewWidth / this.viewHeight)) {
+        dimension = `font-size: 0.95vw;`
+      } else {
+        dimension = `font-size: ${0.9 * this.gridDimension[0] / this.gridDimension[1]}vh;`
+      }
+      return dimension // "font-size: ' + (450 / (this.nbCols * this.nbRows)) + 'em;'
+    },
+    getImageHeight () {
+      let height
+      if ((this.gridDimension[0] / this.gridDimension[1]) > (this.viewWidth / this.viewHeight)) {
+        height = 0.012 * window.innerWidth
+      } else {
+        height = 0.012 * this.gridDimension[0] / this.gridDimension[1] * window.innerHeight
+      }
+      return Math.floor(height)
+    },
+    handleResize () {
+      this.imgHeight = this.getImageHeight()
     }
   }
 }
@@ -139,10 +183,6 @@ export default {
   .pressed{
     background: rgba(0, 0, 0, 0.3);
     border: 1px inset white;
-  }
-
-  .img-cell{
-    height: 1.2vw;
   }
 
 </style>

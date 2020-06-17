@@ -5,20 +5,20 @@
             :hide="haveBegun">
       </Help>
       <div class="bombsRemaining box">
-        <img  src="../img/bomb.png" alt="bomb"/> {{bombsRemaining}}
+        <img  class="img-logos" src="../img/bomb.png" alt="bomb"/> {{bombsRemaining}}
       </div>
       <div class="smiley box" @click="restart()">
         <span v-if="smiley === 'happy'">
-          <img src="../img/happy.png" alt="happy"/>
+          <img class="img-logos" src="../img/happy.png" alt="happy"/>
         </span>
         <span v-if="smiley === 'surprised'">
-          <img src="../img/surprised.png" alt="surprised"/>
+          <img class="img-logos" src="../img/surprised.png" alt="surprised"/>
         </span>
         <span v-if="smiley === 'dead'">
-          <img src="../img/dead.png" alt="dead"/>
+          <img class="img-logos" src="../img/dead.png" alt="dead"/>
         </span>
         <span v-if="smiley === 'cool'">
-          <img src="../img/cool.png" alt="cool"/>
+          <img class="img-logos" src="../img/cool.png" alt="cool"/>
         </span>
       </div>
       <div class="timer box">
@@ -40,7 +40,7 @@
           :cell="cell"
           :is-finished="haveFinished"
           :have-won="haveWon"
-          :style="getCellStyle()"
+          :gridDimension="[nbCols, nbRows]"
           @click.native="clickCell(cell, i)"
           @click.right.native="addFlag(cell)"
           @mousedown.native="mouseDown(cell)"
@@ -386,15 +386,6 @@ export default {
       }
       return nbBombs
     },
-    getCellStyle () {
-      let dimension = ''
-      if ((this.nbCols / this.nbRows) > (this.viewWidth / this.viewHeight)) {
-        dimension = `font-size: 0.85vw;`
-      } else {
-        dimension = `font-size: ${1.5 * this.nbCols / this.nbRows}vh;`
-      }
-      return dimension // "font-size: ' + (450 / (this.nbCols * this.nbRows)) + 'em;'
-    },
     newTime: function (time) {
       this.time = time
     },
@@ -530,7 +521,7 @@ export default {
     left: 0;
   }
 
-  img {
+  .img-logos {
     height: 1.7vw;
     margin-top: -5px;
   }

@@ -119,7 +119,7 @@ export default {
     margin-top: -15px;
   }
   .center-bottom{
-    margin: 5px;
+    margin: 0px;
     text-align: center;
     color: white;
   }

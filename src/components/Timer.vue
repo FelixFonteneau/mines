@@ -1,7 +1,7 @@
 <template>
   <div class="timer">
     <span class="inline">
-      <img src="../img/chrono.png" alt="chrono"/>
+      <img class="img-logos" src="../img/chrono.png" alt="chrono"/>
     </span>
     <span v-if="status === 'hour'" class="inline">
        {{hour}}:

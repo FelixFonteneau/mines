@@ -7,7 +7,7 @@
       aria-controls="collapse-2"
       class="m-1">
       <span class="bestScore">
-        <img  src="../img/crown.png" alt="crown"/> {{bestScore}}
+        <img class="img-logos" src="../img/crown.png" alt="crown"/> {{bestScore}}
       </span>
     </div>
     <b-collapse id="collapse-2" class="scoresHistory" :style="listStyle" v-model="visible">

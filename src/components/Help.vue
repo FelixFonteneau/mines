@@ -4,7 +4,7 @@
          :class="visible ? null : 'collapsed'"
          @click="visible = !visible"
          aria-controls="collapse-1" class="m-1 help">
-      <span class="bestScore"><img  src="../img/question.png" alt="question"/></span>
+      <span class="bestScore"><img class="img-logos" src="../img/question.png" alt="question"/></span>
     </div>
     <b-collapse id="collapse-1" class="helpDropdown" v-model="visible">
       <div class="textHelp">
