@@ -96,9 +96,9 @@ export default {
     getCellStyle () {
       let dimension = ''
       if ((this.gridDimension[0] / this.gridDimension[1]) > (window.innerWidth / window.innerHeight)) {
-        dimension = `font-size: ${2.5 * this.gridDimension[1] / this.gridDimension[0]}vw;`
+        dimension = `font-size: ${50 / this.gridDimension[0]}vw;`
       } else {
-        dimension = `font-size: ${1.5 * this.gridDimension[0] / this.gridDimension[1]}vh;`
+        dimension = `font-size: ${1.2 * this.gridDimension[0] / this.gridDimension[1]}vh;`
       }
       return dimension // "font-size: ' + (450 / (this.nbCols * this.nbRows)) + 'em;'
     },
