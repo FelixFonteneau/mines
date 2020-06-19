@@ -127,7 +127,7 @@ export default {
     margin: 10px auto;
   }
   .selection{
-    background-color: rgb(81, 61, 122);
+    background-color: #51005C;
     padding: 10px;
   }
 </style>

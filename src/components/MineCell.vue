@@ -92,7 +92,7 @@ export default {
         return 'pressed'
       }
       return ''
-    }, // TODO remake the style
+    },
     getCellStyle () {
       let dimension = ''
       if ((this.gridDimension[0] / this.gridDimension[1]) > (window.innerWidth / window.innerHeight)) {
@@ -105,9 +105,9 @@ export default {
     getImageHeight () {
       let height
       if ((this.gridDimension[0] / this.gridDimension[1]) > (this.viewWidth / this.viewHeight)) {
-        height = 0.01 * window.innerWidth
+        height = 0.01 / this.gridDimension[0] * window.innerWidth
       } else {
-        height = 0.01 * this.gridDimension[0] / this.gridDimension[1] * window.innerHeight
+        height = 0.008 * this.gridDimension[0] / this.gridDimension[1] * window.innerHeight
       }
       return Math.floor(height)
     },
@@ -133,11 +133,11 @@ export default {
 
   .bomb {
     border: 1px solid #EEEEEE;
-    background: #c0392b;
+    background-color: #6C2375;
     cursor:initial;
   }
   .flag {
-    color: rgba(241, 2, 27, 0.82);
+    color: rgba(200, 2, 27, 0.82);
     cursor:initial;
   }
 

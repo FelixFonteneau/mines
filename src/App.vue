@@ -44,7 +44,7 @@ export default {
 
 <style>
   .navbar {
-    background-color: rgb(107, 84, 152);
+    background-color: #6C2375;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.6);
   }
   b-nav-item b-navbar-brand {
