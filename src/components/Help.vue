@@ -80,7 +80,7 @@ export default {
     position: absolute;
     width: 35%;
     z-index:10;
-    top:150px;
+    top:70px;
     left:10px;
     opacity: 1;
     background-color: white;

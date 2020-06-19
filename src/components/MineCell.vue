@@ -118,7 +118,7 @@ export default {
 }
 </script>
 
-<style >
+<style scoped>
   .cell {
     align-items: center;
     background: rgba(0, 0, 0, 0.2);

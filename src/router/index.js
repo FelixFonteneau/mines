@@ -3,15 +3,17 @@ import Router from 'vue-router'
 import Welcome from '../components/Welcome'
 import MineGrid from '../components/MineGrid'
 import CustomGame from '../components/CustomGame'
+import NotFound from '../components/NotFound'
 
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
+  base: '/mines/',
   routes: [
     {
       path: '/',
-      name: 'Welcome.vue',
+      name: 'Welcome',
       component: Welcome
     },
     {
@@ -48,6 +50,10 @@ export default new Router({
       path: '/custom',
       name: 'gameCustom',
       component: CustomGame
+    }, {
+      path: '*',
+      name: '404',
+      component: NotFound
     }
   ]
 })

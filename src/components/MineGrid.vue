@@ -420,7 +420,7 @@ export default {
 }
 </script>
 
-<style >
+<style>
   .header {
     width: available;
     background-color: rgba(232, 241, 255, 0);/*rgba(52, 58, 64, 0.85);*/
@@ -448,7 +448,7 @@ export default {
     font-size: 1.7vw;
     background-color: white;
     /* background: #f5f5f5; */
-    border-radius: 10px;
+    border-radius: 4px;
     text-align: center;
     vertical-align: middle;
     display:inline-block;
@@ -469,6 +469,7 @@ export default {
     margin-right: 0;
     margin-left: 0;
     padding: 0;
+    position: relative;
   }
   .game >  {
     flex: 1;

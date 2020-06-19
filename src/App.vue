@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <b-navbar toggleable="lg" type="dark" class="navbar">
-      <b-navbar-brand href="#game">Minesweeper</b-navbar-brand>
+      <b-navbar-brand to="/">Minesweeper</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 

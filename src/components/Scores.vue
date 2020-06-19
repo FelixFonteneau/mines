@@ -160,7 +160,7 @@ export default {
     position: absolute;
     width: 33%;
     z-index:10;
-    top:150px;
+    top:70px;
     right:10px;
     opacity: 1;
     max-height: 62vh;
