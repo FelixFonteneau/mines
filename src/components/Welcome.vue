@@ -4,7 +4,7 @@
       <div class="header-welcome">
         <h1 class="title">Welcome</h1>
         <p class="paragraph">
-          This page is about a remake of the famous game Minesweeper.
+          This page is about a remake of the famous Minesweeper game.
         </p>
         <div class="button">
           <b-button class="button" variant="outline-primary" to="/normal">Start Playing</b-button>
