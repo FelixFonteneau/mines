@@ -22,7 +22,9 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <router-view></router-view>
+    <div class="main">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -45,7 +47,8 @@ export default {
 <style>
   .navbar {
     background-color: #6C2375;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+    overflow-x: hidden;
   }
   b-nav-item b-navbar-brand {
     scroll-behavior: smooth;

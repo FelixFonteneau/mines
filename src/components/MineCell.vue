@@ -1,8 +1,8 @@
 <template>
   <div class="cell"
        :class="getClass()"
-       :style="getCellStyle()"
-       >
+       :style="style"
+       ref="cell">
 
   <div v-if="cell.hasFlag">
     <img class="img-cell"
@@ -47,15 +47,17 @@ export default {
   },
   data: function () {
     return {
-      imgHeight: 0
+      imgHeight: 0,
+      style: ''
     }
   },
-  created () {
-    window.addEventListener('resize2', this.handleResize)
-    this.handleResize()
+  mounted () {
+    window.addEventListener('resize', this.handleResize)
+    this.imgHeight = this.getImageHeight()
+    this.style = this.getCellStyle()
   },
   destroyed () {
-    window.removeEventListener('resize2', this.handleResize)
+    window.removeEventListener('resize', this.handleResize)
   },
   methods: {
     getClass () {
@@ -93,26 +95,26 @@ export default {
       }
       return ''
     },
+    getCellHeight () {
+      return this.$refs.cell.clientHeight
+    },
     getCellStyle () {
-      let dimension = ''
-      if ((this.gridDimension[0] / this.gridDimension[1]) > (window.innerWidth / window.innerHeight)) {
-        dimension = `font-size: ${50 / this.gridDimension[0]}vw;`
-      } else {
-        dimension = `font-size: ${1.2 * this.gridDimension[0] / this.gridDimension[1]}vh;`
-      }
-      return dimension // "font-size: ' + (450 / (this.nbCols * this.nbRows)) + 'em;'
+      let dimension = 'font-family: URW Gothic L, sans-serif;\n'
+      dimension += `font-size: ${this.getCellHeight() / 2}px;`
+      return dimension
     },
     getImageHeight () {
-      let height
-      if ((this.gridDimension[0] / this.gridDimension[1]) > (this.viewWidth / this.viewHeight)) {
-        height = 0.01 / this.gridDimension[0] * window.innerWidth
-      } else {
-        height = 0.008 * this.gridDimension[0] / this.gridDimension[1] * window.innerHeight
-      }
-      return Math.floor(height)
+      return Math.floor(this.getCellHeight() / 2.5)
     },
     handleResize () {
+      console.log('resize')
       this.imgHeight = this.getImageHeight()
+      this.style = this.getCellStyle()
+    }
+  },
+  watch: {
+    cell () {
+      this.handleResize()
     }
   }
 }
