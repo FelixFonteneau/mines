@@ -56,7 +56,7 @@
     hide-backdrop
     content-class="shadow"
     centered title="Congratulation!!!">
-    <p class="my-4">Congratulation, you have finish the Minesweeper!</p>
+    <p class="my-4">Congratulation, you have finished the Minesweeper!</p>
     <p class="my-4" v-if="nbRows < 14 || nbCols < 20 || nbBombs < 80"> You can now try harder levels ;)</p>
     <template v-slot:modal-footer="{ok}">
       <!-- Emulate built in modal footer ok and cancel button actions -->
