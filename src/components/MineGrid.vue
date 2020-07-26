@@ -22,9 +22,9 @@
                 centered title="Congratulation!!!">
             <p class="my-4">Congratulation, you have finished the Minesweeper!</p>
             <p class="my-4" v-if="difficulty === 'easy' || difficulty === 'intermediate'"> You can now try harder levels ;)</p>
-            <template>
+            <template v-slot:modal-footer>
                 <!-- Emulate built in modal footer ok and cancel button actions -->
-                <b-button size="sm" variant="light" @click="tryAgainModal()">
+                <b-button size="sm" variant="outline-success" @click="tryAgainModal()">
                     Try again ?
                 </b-button>
             </template>
@@ -37,10 +37,10 @@
                 content-class="shadow"
                 centered title="You died!">
             <p class="my-4">You exploded while clicking a bomb... <br/> You might be luckier soon ;)</p>
-            <template>
+            <template v-slot:modal-footer>
                 <!-- Emulate built in modal footer ok and cancel button actions -->
-                <b-button size="sm" variant="light" @click="tryAgainModal()">
-                    Try again ?
+                <b-button size="sm" variant="outline-danger" @click="tryAgainModal()">
+                    Try again
                 </b-button>
             </template>
         </b-modal>
@@ -69,7 +69,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['fetchGrid', 'clickOnCell', 'rightClickOnCell', 'mouseDown', 'mouseLeave']),
+        ...mapActions(['fetchGrid', 'clickOnCell', 'rightClickOnCell', 'mouseDown', 'mouseLeave', 'restart']),
         getGridStyle () {
             let dimension = ''
             if ((this.colNumber / this.rowNumber) > (this.viewWidth / this.viewHeight)) {
@@ -80,12 +80,12 @@ export default {
             return `grid-template-columns: repeat(${this.colNumber}, 1fr);` + dimension
         },
         tryAgainModal () {
-            // todo restart
+            this.restart()
             this.$bvModal.hide('winning-modal')
             this.$bvModal.hide('loosing-modal')
         },
     },
-    computed: mapGetters(['grid', 'gameStatus', 'difficulty', 'rowNumber', 'colNumber']),
+    computed: mapGetters(['grid', 'gameStatus', 'difficulty', 'rowNumber', 'colNumber', 'resize']),
     created() {
         this.fetchGrid();
         this.gridStyle = this.getGridStyle()
@@ -126,6 +126,9 @@ export default {
         },
         colNumber () {
             this.gridStyle = this.getGridStyle()
+        },
+        resize () {
+
         }
     }
 }

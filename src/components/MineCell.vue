@@ -42,15 +42,7 @@ export default {
             style: ''
         }
     },
-    mounted () {
-        window.addEventListener('resize', this.handleResize)
-        this.imgHeight = this.getImageHeight()
-        this.style = this.getCellStyle()
-    },
-    destroyed () {
-        window.removeEventListener('resize', this.handleResize)
-    },
-    computed: mapGetters(['gameStatus']),
+    computed: mapGetters(['gameStatus', 'resize']),
     methods: {
         getClass () {
             if (this.gameStatus === 'loose' || this.gameStatus === 'won') {
@@ -106,6 +98,9 @@ export default {
     },
     watch: {
         cell () {
+            this.handleResize()
+        },
+        resize () {
             this.handleResize()
         }
     }

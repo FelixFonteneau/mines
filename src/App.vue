@@ -32,9 +32,23 @@
 
 <script>
 
+import {mapActions} from "vuex";
+
 export default {
   name: 'App',
-  components: {  }
+  components: {  },
+  methods: {
+    ...mapActions(['resize']),
+    handleResize() {
+      this.resize()
+    }
+  },
+  mounted () {
+    window.addEventListener('resize', this.handleResize)
+  },
+  destroyed () {
+    window.removeEventListener('resize', this.handleResize)
+  },
 }
 </script>
 

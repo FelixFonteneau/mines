@@ -9,6 +9,7 @@ const state = {
     gameStatus: 'uninitialised',
     smiley: 'happy',
     cellIndexPressed: null,
+    resize: false,
     gridSize () {
         return this.colNumber * this.rowNumber
     }
@@ -20,19 +21,24 @@ const getters = {
     gameStatus: state => state.gameStatus,
     rowNumber: state => state.rowNumber,
     colNumber: state => state.colNumber,
+    resize: state => state.resize,
+
 }
 
 const actions = {
     fetchGrid({ commit }){
         if (state.gameStatus === 'uninitialised') {
             let grid = createTheGrid(state.gridSize())
-            commit('updateCellRemaining', state.gridSize())
+            commit('updateCellRemaining', state.gridSize() - state.bombNumber)
             commit('updateGrid', grid)
             commit('updateGameStatus', 'initialised')
         } else if (state.gameStatus === 'began') {
             // todo update the timer
             commit()
         }
+    },
+    resize({commit}) {
+        commit('updateResize')
     },
     clickOnCell({ commit }, cellClickedIndex ) {
         let grid = state.grid
@@ -47,7 +53,7 @@ const actions = {
                 if (results.loose) {
                     commit('updateGameStatus', 'loose')
                 }
-                if (results.cellRemaining === 0) {
+                if (results.cellRemaining == 0) {
                     commit('updateGameStatus', 'won')
                 }
                 commit('updateCellRemaining', results.cellRemaining)
@@ -106,6 +112,14 @@ const actions = {
             }
         }
     },
+    restart({commit}) {
+        let grid = createTheGrid(state.rowNumber * state.colNumber)
+        commit('updateCellRemaining', (state.rowNumber * state.colNumber) - state.bombNumber)
+        commit('updateGrid', grid)
+        commit('updateGameStatus', 'initialised')
+        commit('updateBombRemaining', state.bombNumber)
+        commit('updateSmiley', 'happy')
+    },
     changeDifficulty({ commit }, difficulty){
         let rowNumber, colNumber, bombNumber
         if (difficulty === 'easy') {
@@ -122,9 +136,12 @@ const actions = {
             bombNumber = 10
         }
         let grid = createTheGrid(rowNumber * colNumber)
-        commit('updateCellRemaining', rowNumber * colNumber)
+        commit('updateGameStatus', 'initialised')
+        commit('updateCellRemaining', (rowNumber * colNumber) - bombNumber)
         commit('updateGrid', grid)
         commit('updateDifficulty', rowNumber, colNumber, bombNumber)
+        commit('updateBombRemaining', bombNumber)
+        commit('updateSmiley', 'happy')
     },
 
 }
@@ -141,7 +158,8 @@ const mutations = {
     updateCellRemaining: (state, cellRemaining) => state.cellRemaining = cellRemaining,
     updateBombRemaining: (state, bombRemaining) => state.bombRemaining = bombRemaining,
     updateSmiley: (state, smiley) => state.smiley = smiley,
-    updateCellIndexPressed: (state, cellPressed) => state.cellIndexPressed = cellPressed
+    updateCellIndexPressed: (state, cellPressed) => state.cellIndexPressed = cellPressed,
+    updateResize: (state) => state.resize = !state.resize
 }
 
 export default {
@@ -151,6 +169,7 @@ export default {
     mutations
 }
 
+/* -------------- Functions to manage the grid -------------- */
 
 function createTheGrid(gridSize) {
     let grid = []
