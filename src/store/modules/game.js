@@ -5,7 +5,10 @@ const state = {
     colNumber: 10,
     bombNumber: 10,
     cellRemaining: 18,
+    bombRemaining: 10,
     gameStatus: 'uninitialised',
+    smiley: 'happy',
+    cellIndexPressed: null,
     gridSize () {
         return this.colNumber * this.rowNumber
     }
@@ -32,14 +35,12 @@ const actions = {
         }
     },
     clickOnCell({ commit }, cellClickedIndex ) {
-        console.log('1: ',state)
         let grid = state.grid
         let cellRemaining = state.cellRemaining
         if (state.gameStatus === 'initialised') {
             grid = fillTheGrid(state.grid, cellClickedIndex)
             commit('updateGameStatus', 'began')
         }
-        console.log('2: ',state)
         if (state.gameStatus === 'began' || state.gameStatus === 'initialised') {
             if (!grid[cellClickedIndex].isOpen) {
                 let results = openCell(grid, cellClickedIndex, cellRemaining)
@@ -52,7 +53,8 @@ const actions = {
                 commit('updateCellRemaining', results.cellRemaining)
                 commit('updateGrid', results.grid)
 
-            } else if (grid[cellClickedIndex].bombNb > 0 && grid[cellClickedIndex].bombNb === getNumberNeighboursFlag(cellClickedIndex)) {
+            } else if (getNumberNeighboursBombs(grid, cellClickedIndex) > 0
+                        && getNumberNeighboursBombs(grid, cellClickedIndex) === getNumberNeighboursFlag(grid, cellClickedIndex)) {
                 let results = openNeighbours(grid, cellClickedIndex, cellRemaining)
                 if (results.loose) {
                     commit('updateGameStatus', 'loose')
@@ -63,7 +65,45 @@ const actions = {
                 commit('updateCellRemaining', results.cellRemaining)
                 commit('updateGrid', results.grid)
             }
-
+        }
+    },
+    rightClickOnCell ({ commit }, cellClickedIndex) {
+        // right click is use to put flag or
+        if ( state.gameStatus === 'began' && !state.grid[cellClickedIndex].isOpen) {
+            let grid = state.grid
+            grid[cellClickedIndex].hasFlag = !grid[cellClickedIndex].hasFlag
+            if (state.grid[cellClickedIndex].hasFlag) {
+                commit('updateBombRemaining', state.bombRemaining - 1)
+            } else {
+                commit('updateBombRemaining', state.bombRemaining + 1)
+            }
+            commit('updateGrid', grid)
+        }
+    },
+    mouseDown ({ commit }, cellIndex) {
+        if (!state.grid[cellIndex].isOpen && state.cellIndexPressed === null) {
+            let grid = state.grid
+            grid[cellIndex].pressed = true
+            commit('updateGrid', grid)
+            commit('updateSmiley', 'surprised')
+            commit('updateCellIndexPressed', cellIndex)
+        }
+    },
+    mouseLeave ({ commit }, cellIndex) {
+        if (state.cellIndexPressed !== null) {
+            let grid = state.grid
+            grid[cellIndex].pressed = false
+            commit('updateGrid', grid)
+            commit('updateCellIndexPressed', null)
+            if (state.gameStatus === 'began'){
+                commit('updateSmiley', 'happy')
+            } else if (state.gameStatus === 'won') {
+                commit('updateSmiley', 'cool')
+            } else if (state.gameStatus === 'loose') {
+                commit('updateSmiley', 'dead')
+            } else {
+                commit('updateSmiley', 'happy')
+            }
         }
     },
     changeDifficulty({ commit }, difficulty){
@@ -95,9 +135,13 @@ const mutations = {
         state.rowNumber = rowNumber
         state.colNumber = colNumber
         state.bombNumber = bombNumber
+        state.bombRemaining = bombNumber
     },
     updateGameStatus: (state, gameStatus) => state.gameStatus = gameStatus,
     updateCellRemaining: (state, cellRemaining) => state.cellRemaining = cellRemaining,
+    updateBombRemaining: (state, bombRemaining) => state.bombRemaining = bombRemaining,
+    updateSmiley: (state, smiley) => state.smiley = smiley,
+    updateCellIndexPressed: (state, cellPressed) => state.cellIndexPressed = cellPressed
 }
 
 export default {
@@ -179,32 +223,26 @@ function getNumberNeighboursBombs (grid, index) {
 }
 
 function getNumberNeighboursFlag (grid, index) {
-    let nbBombs = 0
+    let nbFlags = 0
     let neighbours = getNeighboursIndex(index)
     for (let i = 0; i < neighbours.length; i++) {
         if (grid[neighbours[i]].hasFlag) {
-            nbBombs++
+            nbFlags++
         }
     }
-    return nbBombs
+    return nbFlags
 }
 
 function openCell(grid, cellClickedIndex, cellRemaining) {
-    console.log('bonsoir',grid)
     if (grid[cellClickedIndex].hasFlag || grid[cellClickedIndex].isOpen) {
-        return grid
+        return {grid: grid, cellRemaining: cellRemaining, loose: false}
     }
     grid[cellClickedIndex].isOpen = true
     // if (cellClicked.pressed) {
     //     cellClicked.pressed = false
     // }
     if (grid[cellClickedIndex].hasBomb) {
-        // this.$refs['loosing-modal'].show()
-        // this.smiley = 'dead'
-        // this.haveFinished = true
-        // this.timerStop = true
-        // this.haveWon = false
-        // this.revealGrid()
+
         return {grid: grid, cellRemaining: cellRemaining, loose: true}
 
     } else {
@@ -225,7 +263,6 @@ function openCell(grid, cellClickedIndex, cellRemaining) {
 function openNeighbours(grid, cellClickedIndex, cellRemaining) {
     let neighbours = getNeighboursIndex(cellClickedIndex)
     for (let i = 0; i < neighbours.length; i++) {
-        console.log('oui,', grid)
         if (!grid[neighbours[i]].isOpen) {
             let results = openCell(grid, neighbours[i], cellRemaining)
             grid = results.grid
@@ -233,6 +270,7 @@ function openNeighbours(grid, cellClickedIndex, cellRemaining) {
             if (results.loose) {
                 return {grid: grid, cellRemaining: cellRemaining, loose: true}
             }
+
         }
     }
     return {grid: grid, cellRemaining: cellRemaining, loose: false}

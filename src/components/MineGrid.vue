@@ -6,7 +6,9 @@
                     :key="i"
                     :cell="cell"
                     @click.native="clickOnCell(i)"
-
+                    @click.right.native="rightClickOnCell(i)"
+                    @mousedown.native="mouseDown(i)"
+                    @mouseleave.native="mouseLeave(i)"
                     @contextmenu.native.prevent
             >
             </MineCell>
@@ -59,6 +61,7 @@ export default {
     },
     data: function () {
         return {
+            smiley: 'happy',
             viewWidth: window.innerWidth,
             viewHeight: window.innerHeight,
             gridStyle: this.getGridStyle(),
@@ -66,7 +69,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['fetchGrid', 'clickOnCell']),
+        ...mapActions(['fetchGrid', 'clickOnCell', 'rightClickOnCell', 'mouseDown', 'mouseLeave']),
         getGridStyle () {
             let dimension = ''
             if ((this.colNumber / this.rowNumber) > (this.viewWidth / this.viewHeight)) {
@@ -80,7 +83,7 @@ export default {
             // todo restart
             this.$bvModal.hide('winning-modal')
             this.$bvModal.hide('loosing-modal')
-        }
+        },
     },
     computed: mapGetters(['grid', 'gameStatus', 'difficulty', 'rowNumber', 'colNumber']),
     created() {
@@ -89,6 +92,41 @@ export default {
     },
     destroyed() {
 
+    },
+    watch: {
+        gameStatus () {
+            if (this.gameStatus === 'loose') {
+                this.$refs['loosing-modal'].show()
+                this.smiley = 'dead'
+
+            } else if (this.gameStatus === 'won') {
+                this.smiley = 'cool'
+                // launch firework
+                const confetti = require('canvas-confetti')
+                let canvas = document.getElementById('firework-canvas')
+                // canvas.style.visibility = 'visible'
+                let myConfetti = confetti.create(canvas, {
+                    resize: true,
+                    useWorker: true
+                })
+                myConfetti({
+                    particleCount: 170,
+                    spread: 180
+                    // any other options from the global
+                    // confetti function
+                })
+                this.$refs['winning-modal'].show()
+            }
+        },
+        difficulty () {
+            this.gridStyle = this.getGridStyle()
+        },
+        rowNumber () {
+            this.gridStyle = this.getGridStyle()
+        },
+        colNumber () {
+            this.gridStyle = this.getGridStyle()
+        }
     }
 }
 </script>
