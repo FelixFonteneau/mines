@@ -110,18 +110,18 @@ export default {
     .cell {
         align-items: center;
         background: rgba(0, 0, 0, 0.2);
-        border: 2px outset white;
+        border: 2px outset var(--cell-border-color);
         cursor: pointer;
         display: flex;
         justify-content: center;
         min-height: 10px;
         min-width: 10px;
-        border-radius: 2px;
+        border-radius: 0px;
     }
 
     .bomb {
         border: 1px solid #EEEEEE;
-        background-color: #6C2375;
+        background-color: #970000;
         cursor:initial;
     }
     .flag {
@@ -134,9 +134,9 @@ export default {
     }
 
     .open {
-        border: 1px solid #EEEEEE;
+        border: 1px solid var(--cell-border-color);
         cursor:initial;
-        background: rgba(178, 118, 255, 0.11);
+        background: var(--cell-open-color);
         font-weight: bold; /* same as 700 */
     }
     .nb1 {

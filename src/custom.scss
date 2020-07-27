@@ -1,4 +1,4 @@
-// File: custom.scss
+// File: theme-color.scss
 
 // Define your variable overrides here
 // $enable-shadows: true;
@@ -21,3 +21,31 @@ $primary: #6C2375 !default;
 $primary: #6C2375 !default;
 // General style overrides and custom classes
 // ...
+
+/*
+* === COLORS ===
+*/
+:root {
+  --app-background-color: #eeeeee;
+  --cell-border-color: #ffffff;
+  --cell-open-color: #faf2ff;
+  --grid-fade-color: #ffffff;
+
+}
+
+[theme="dark"] {
+  --app-background-color: #282828;
+  //--cell-border-color: #585858;
+  //--cell-open-color: #8e7299;
+  --cell-border-color: #d9d9d9;
+  --cell-open-color: #d9d9d9;
+  --grid-fade-color: #2d2d2d;
+}
+
+
+/*
+* === STYLES ===
+*/
+.app-background {
+  background-color: var(--app-background-color);
+}

@@ -15,6 +15,18 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
+          <b-nav-item-dropdown text="gear" right>
+            <!-- Using 'button-content' slot -->
+            <template slot="button-content">
+              <b-icon-gear></b-icon-gear>
+            </template>
+            <b-nav-text style="text-align: center">
+              <div class="custom-control custom-switch" style="color: #091A28">
+                <input type="checkbox" class="custom-control-input" id="customSwitch1" v-model="darkMode">
+                <label class="custom-control-label" for="customSwitch1">Dark mode</label>
+              </div>
+            </b-nav-text>
+          </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Difficulty" right>
             <b-dropdown-item :active="difficulty === 'easy'" to="/game" @click="changeDifficulty('easy')">Easy</b-dropdown-item>
             <b-dropdown-item :active="difficulty === 'intermediate'" to="/game" @click="changeDifficulty('intermediate')">Intermediate</b-dropdown-item>
@@ -24,9 +36,11 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
+
     <div class="main">
       <router-view></router-view>
     </div>
+
   </div>
 </template>
 
@@ -43,8 +57,42 @@ export default {
       this.resize()
     }
   },
+  data() {
+    return {
+      darkMode: false,
+    }
+  },
+  watch: {
+    darkMode: function () {
+      // add/remove class to/from html tag
+      let htmlElement = document.documentElement;
+
+      if (this.darkMode) {
+        localStorage.setItem("theme", 'dark');
+        htmlElement.setAttribute('theme', 'dark');
+      } else {
+        localStorage.setItem("theme", 'light');
+        htmlElement.setAttribute('theme', 'light');
+      }
+    }
+  },
   computed: mapGetters(['difficulty']),
   mounted () {
+    // set 'app-background' class to body
+    let bodyElement = document.body;
+    bodyElement.classList.add("app-background");
+    // check for active theme
+    let htmlElement = document.documentElement;
+    let theme = localStorage.getItem("theme");
+
+    if (theme === 'dark') {
+      htmlElement.setAttribute('theme', 'dark')
+      this.darkMode = true
+    } else {
+      htmlElement.setAttribute('theme', 'light');
+      this.darkMode = false
+    }
+    // set the resize listener
     window.addEventListener('resize', this.handleResize)
   },
   destroyed () {
