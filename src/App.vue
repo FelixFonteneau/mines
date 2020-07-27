@@ -8,7 +8,7 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item to="/" :active='$route.name =="welcomePage"'><b-icon-house></b-icon-house></b-nav-item>
-          <b-nav-item to="/normal" :active='$route.name =="gameNormal"'><b-icon-play></b-icon-play></b-nav-item>
+          <b-nav-item to="/game" :active='$route.name =="gamePage"'><b-icon-play></b-icon-play></b-nav-item>
           <b-nav-item to="/scores" :active='$route.name =="scoresPage"'><b-icon-award></b-icon-award></b-nav-item>
           <b-nav-item to="/help" :active='$route.name =="helpPage"'><b-icon-question-circle></b-icon-question-circle></b-nav-item>
         </b-navbar-nav>
@@ -16,10 +16,10 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown text="Difficulty" right>
-            <b-dropdown-item to="easy">Easy</b-dropdown-item>
-            <b-dropdown-item to="medium">Intermediate</b-dropdown-item>
-            <b-dropdown-item to="normal">Normal</b-dropdown-item>
-            <b-dropdown-item to="custom">Custom</b-dropdown-item>
+            <b-dropdown-item :active="difficulty === 'easy'" to="/game" @click="changeDifficulty('easy')">Easy</b-dropdown-item>
+            <b-dropdown-item :active="difficulty === 'intermediate'" to="/game" @click="changeDifficulty('intermediate')">Intermediate</b-dropdown-item>
+            <b-dropdown-item :active="difficulty === 'normal'" to="/game" @click="changeDifficulty('normal')">Normal</b-dropdown-item>
+            <b-dropdown-item :active="difficulty === 'custom'" to="/game" @click="changeDifficulty('custom')">Custom</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -32,17 +32,18 @@
 
 <script>
 
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: 'App',
   components: {  },
   methods: {
-    ...mapActions(['resize']),
+    ...mapActions(['resize', 'changeDifficulty']),
     handleResize() {
       this.resize()
     }
   },
+  computed: mapGetters(['difficulty']),
   mounted () {
     window.addEventListener('resize', this.handleResize)
   },

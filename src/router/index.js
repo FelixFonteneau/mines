@@ -18,6 +18,11 @@ export default new Router({
       component: WelcomePage
     },
     {
+      path: '/game',
+      name: 'gamePage',
+      component: MineGrid,
+    },
+    /*{
       path: '/easy',
       name: 'gameEasy',
       component: MineGrid,
@@ -47,7 +52,7 @@ export default new Router({
         nbBombs: 99,
         restartGame: false
       }
-    }, /*{
+    }, {
       path: '/custom',
       name: 'gameCustom',
       component: CustomGame

@@ -34,7 +34,7 @@ const actions = {
             commit('updateGameStatus', 'initialised')
         } else if (state.gameStatus === 'began') {
             // todo update the timer
-            commit()
+            // commit()
         }
     },
     resize({commit}) {
@@ -127,19 +127,22 @@ const actions = {
             colNumber = 10
             bombNumber = 10
         } else if (difficulty === 'intermediate') {
-            rowNumber = 8
-            colNumber = 10
-            bombNumber = 10
+            rowNumber = 14
+            colNumber = 16
+            bombNumber = 40
         } else {
-            rowNumber = 8
-            colNumber = 10
-            bombNumber = 10
+            rowNumber = 16
+            colNumber = 30
+            bombNumber = 99
         }
         let grid = createTheGrid(rowNumber * colNumber)
+        commit('updateDifficulty', difficulty)
+        commit('updateRowNumber', rowNumber)
+        commit('updateColNumber', colNumber)
+        commit('updateBombNumber', bombNumber)
         commit('updateGameStatus', 'initialised')
         commit('updateCellRemaining', (rowNumber * colNumber) - bombNumber)
         commit('updateGrid', grid)
-        commit('updateDifficulty', rowNumber, colNumber, bombNumber)
         commit('updateBombRemaining', bombNumber)
         commit('updateSmiley', 'happy')
     },
@@ -148,12 +151,10 @@ const actions = {
 
 const mutations = {
     updateGrid: (state, grid) => state.grid = grid,
-    updateDifficulty: (state, rowNumber, colNumber, bombNumber) => {
-        state.rowNumber = rowNumber
-        state.colNumber = colNumber
-        state.bombNumber = bombNumber
-        state.bombRemaining = bombNumber
-    },
+    updateDifficulty: (state, difficulty) => state.difficulty = difficulty,
+    updateRowNumber: (state, rowNumber) => state.rowNumber = rowNumber,
+    updateColNumber: (state, colNumber) => state.colNumber = colNumber,
+    updateBombNumber: (state, bombNumber) => state.bombNumber = bombNumber,
     updateGameStatus: (state, gameStatus) => state.gameStatus = gameStatus,
     updateCellRemaining: (state, cellRemaining) => state.cellRemaining = cellRemaining,
     updateBombRemaining: (state, bombRemaining) => state.bombRemaining = bombRemaining,

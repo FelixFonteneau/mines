@@ -91,7 +91,6 @@ export default {
             return Math.floor(this.getCellHeight() / 2.5)
         },
         handleResize () {
-            console.log('resize')
             this.imgHeight = this.getImageHeight()
             this.style = this.getCellStyle()
         }
